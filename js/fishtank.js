@@ -15,10 +15,13 @@ class Fish {
         this.OpenMouth = path + "\\OpenMouth"
         this.Tail = path + "\\Tail"
 
-        let info = JSON.parse(FileReader.readAsText(path + "\\info.json"))
-        this.Name = info.Name
-        this.Size = info.Size
-        this.Speed = info.Speed
+        fetch("./" + path + "/info.json")
+            .then((response) => response.json())
+            .then((infoJson) => {
+                this.Name = infoJson.Name
+                this.Size = infoJson.Size
+                this.Speed = infoJson.Speed
+            });
 
         this.EyeState = State.Open
         this.MouthState = State.Closed
@@ -31,11 +34,36 @@ class Fish {
 
     }
 
+    //When edge is hit, flip fish and reverse velocty
     HitEdge(){
         this.EyeState = State.Closed
         this.MouthState = State.Open
+        this.velocity = 0
+        Flip()
+        this.EyeState = State.Open
+        this.MouthState = State.Closed
+        Swim()
+    }
+
+    Flip(){
+
+    }
+
+    Blink(){
+        this.EyeState = State.Open
+        this.EyeState = State.Closed
+        //some async wait
+        this.EyeState = State.Open
+    }
+
+    GetThumb(){
+
     }
 }
+
+$(document).ready(function(){
+    initializeFishTank()
+})
 
 function initializeFishTank() {
     const artFishes = [artFishCount]
@@ -53,6 +81,12 @@ function initializeFishTank() {
 //Jquery to add fish to side menu
 function CreateMenuCategory(fishes, category){
     if(fishes.length === 0) return
+    let strToAppend = ""
+    for (let fish in fishes) {
+        strToAppend += "<div class='menu-fish'><div class='name'>" + fish.Name +
+            "</div><img class='fish-thumb' src='" + fish.Body + "'</div>"
+    }
+    $(".side-menu").append(strToAppend)
 }
 
 //Add fish to tank
