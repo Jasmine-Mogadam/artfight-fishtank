@@ -1,5 +1,7 @@
-const artFishCount = 1;
-const extraFishCount = 0;
+const FishCategories = [
+    {Count: 1, FolderName: "ArtFight", DisplayName: "Art Fight"},
+    {Count: 0, FolderName: "Extra", DisplayName: "Extra"}
+]
 const State = {
     Open: 0,
     Closed: 1
@@ -8,26 +10,24 @@ let rollingId = 0
 
 class Fish {
     constructor(path) {
-        this.Body = path + "\\Body"
-        this.ClosedEye = path + "\\ClosedEye"
-        this.ClosedMouth = path + "\\ClosedMouth"
-        this.OpenEye = path + "\\OpenEye"
-        this.OpenMouth = path + "\\OpenMouth"
-        this.Tail = path + "\\Tail"
+        this.Path = path
 
-        fetch("./" + path + "/info.json")
-            .then((response) => response.json())
-            .then((infoJson) => {
-                this.Name = infoJson.Name
-                this.Size = infoJson.Size
-                this.Speed = infoJson.Speed
-            });
+        this.Body = path + "/Body.png"
+        this.ClosedEye = path + "/ClosedEye.png"
+        this.ClosedMouth = path + "/ClosedMouth.png"
+        this.OpenEye = path + "/OpenEye.png"
+        this.OpenMouth = path + "/OpenMouth.png"
+        this.Tail = path + "/Tail.png"
+        this.Thumb = path + "/Thumb.png"
 
         this.EyeState = State.Open
         this.MouthState = State.Closed
         this.Velocity = 0
 
         this.id = null
+        this.Name = null
+        this.Size = null
+        this.Speed = null
     }
 
     Swim(){
@@ -49,16 +49,32 @@ class Fish {
 
     }
 
-    Blink(){
+    async Blink(){
         this.EyeState = State.Open
         this.EyeState = State.Closed
-        //some async wait
+        let promise = Promise.resolve(10)
+        let result = await promise
         this.EyeState = State.Open
     }
+}
 
-    GetThumb(){
+async function ReadJsonFile(url) {
+    let res = await fetch(url);
+}
 
+async function AddInfoFromJsonFilesToFishes(fishes){
+    let jsonFetches = []
+    for (let i = 0; i < fishes.length; i++) {
+        jsonFetches[i] = fetch("./" + fishes[i].Path + "/info.json").then(response => response.json())
     }
+    let infoJsonFiles = await Promise.all(jsonFetches)
+    for (let i = 0; i < fishes.length; i++) {
+        fishes[i].Name = infoJsonFiles[i].Name
+        fishes[i].Size = infoJsonFiles[i].Size
+        fishes[i].Speed = infoJsonFiles[i].Speed
+    }
+
+    return fishes
 }
 
 $(document).ready(function(){
@@ -66,26 +82,26 @@ $(document).ready(function(){
 })
 
 function initializeFishTank() {
-    const artFishes = [artFishCount]
-    const extraFishes = [extraFishCount]
-    for (let i = 0; i < artFishCount; i++) {
-        artFishes[i] = new Fish("Fish\\Artfight\\" + i)
+    FishCategories.forEach(initializeFishType)
+}
+
+function initializeFishType(fishCategory){
+    if(fishCategory.Count == 0) return
+    const fishes = []
+    for (let i = 0; i < fishCategory.Count; i++) {
+        fishes[i] = new Fish("Fish/" + fishCategory.FolderName + "/" + i)
     }
-    for (let i = 0; i < extraFishCount; i++) {
-        extraFishes[i] = new Fish("Fish\\Extra\\" + i)
-    }
-    CreateMenuCategory(artFishes, "Art Fight Fishes")
-    CreateMenuCategory(extraFishes, "Extra Fishes")
+    AddInfoFromJsonFilesToFishes(fishes).then((fishes) => CreateMenuCategory(fishes, fishCategory.DisplayName))
 }
 
 //Jquery to add fish to side menu
 function CreateMenuCategory(fishes, category){
-    if(fishes.length === 0) return
-    let strToAppend = ""
-    for (let fish in fishes) {
+    let strToAppend = "<div class='menu-category'><div class='menu-category-title'>" + category + " Fish</div>"
+    fishes.forEach(fish => {
         strToAppend += "<div class='menu-fish'><div class='name'>" + fish.Name +
-            "</div><img class='fish-thumb' src='" + fish.Body + "'</div>"
-    }
+            "</div><img class='fish-thumb' src='" + fish.Thumb + "'\></div>"
+    })
+    strToAppend+= "</div></div>"
     $(".side-menu").append(strToAppend)
 }
 
