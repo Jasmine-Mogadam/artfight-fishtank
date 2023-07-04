@@ -10,16 +10,21 @@
   <body>
 
   <div class="navbar">
-    <ul>
+    <ul class="nav navbar-nav">
       <li><a>The Tank</a></li>
       <li><a href="creator.html">The Creator</a></li>
     </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <button class="hide-side-menu-button" id="side-menu-button" type="button" onclick="ToggleSideMenu()">
+        Show Fish
+      </button>
+    </ul>
   </div>
 
-  <div class="side-menu">
+  <nav class="hide-menu side-menu" id="hide-menu">
     <h1>Fish</h1>
     <p>Drag the fish you want into the tank!</p>
-  </div>
+  </nav>
 
   <div class="tank">
   </div>

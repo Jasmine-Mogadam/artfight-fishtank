@@ -4,6 +4,7 @@
     --secondary-color: #66cc33;
     --tertiary-color: #ff9900;
     --accent-color: #cc3366;
+    --size: 100px;
 }
 
 /* Reset styles to remove default padding and margin */
@@ -37,6 +38,7 @@ html, body {
 }
 
 .navbar a {
+    z-index: 2;
     color: white;
     text-decoration: none;
     padding: 5px 10px;
@@ -50,6 +52,7 @@ html, body {
 
 /* Side menu styles */
 .side-menu {
+    z-index: 1;
     background-color: var(--secondary-color);
     position: fixed;
     top: 0;
@@ -60,19 +63,55 @@ html, body {
     transition: right 0.3s ease; /* Adding smooth transition when retracting */
 }
 
-/* Tank styles */
-.tank {
-    background-color: var(--tertiary-color);
+.hide-menu {
+    background-color: var(--secondary-color);
     position: absolute;
-    top: 50px;
-    left: 0;
-    right: 300px; /* Make sure to match the width of the side-menu */
-    bottom: 0;
+    top:0;
+    right:0;
+    z-index: 1;
+    width: 300px;
+    height: 100%;
+    padding: 20px;
+    -webkit-transform: translate3d(300px,0,0);
+    -moz-transform: translate3d(300px,0,0);
+    -o-transform: translate3d(300px,0,0);
+    -ms-transform: translate3d(300px,0,0);
+    transform: translate3d(300px,0,0);
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    transition: all 0.3s linear;
 }
 
-/* Styles for retracting the side menu */
-.tank.active {
-    right: 0;
+.show-menu {
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+.hide-side-menu-button{
+    cursor:pointer;
+    -webkit-transform: translate3d(-10px,0,0);
+    -moz-transform: translate3d(-10px,0,0);
+    -o-transform: translate3d(-10px,0,0);
+    -ms-transform: translate3d(-10px,0,0);
+    transform: translate3d(-10px,0,0);
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+}
+
+.show-side-menu-button {
+    margin-right: 310px;
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 
 /* Styles for the fish thumbnail and category title */
@@ -98,4 +137,44 @@ html, body {
     max-height: 100px; /* Adjust the height as needed */
     display: block;
     margin: 0 auto;
+}
+
+/* Tank styles */
+.tank {
+    background-color: var(--tertiary-color);
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Styles for retracting the side menu */
+.tank.active {
+    right: 0;
+}
+
+.tank-fish {
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+}
+
+.x {
+    animation: x 13s linear infinite alternate;
+}
+
+.y {
+    animation: y 7s linear infinite alternate;
+}
+
+@keyframes x {
+    100% {
+        transform: translateX(calc(100vw - var(--size)));
+    }
+}
+@keyframes y {
+    100% {
+        transform: translateY(calc(100vh - var(--size)));
+    }
 }

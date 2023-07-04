@@ -6,7 +6,6 @@ const State = {
     Open: 0,
     Closed: 1
 }
-let draggedFish
 let rollingId = 0
 
 class Fish {
@@ -32,8 +31,10 @@ class Fish {
     }
 
     BuildFish(){
-        let strToAppend = "<div class='tank-fish' id='" + fishClone.id + "'>Fish Added! " + fishClone.id + "</div>"
-        return strToAppend
+        let strToAppend = "<div class='x'><div class='y'><div class='tank-fish' id='" + this.id +
+            "'>Fish Added! " + this.id
+        strToAppend+= "</div></div></div></div>"
+        $(".tank").append(strToAppend)
     }
 
     Swim(){
@@ -91,26 +92,6 @@ $(document).ready(function(){
     tank.addEventListener('dragover', dragOver);
     tank.addEventListener('dragleave', dragLeave);
     tank.addEventListener('drop', drop);
-
-    [...document.querySelectorAll(".side-menu .menu-category .menu-fish")].forEach(menuFish => {
-        console.log("beans")
-        menuFish.addEventListener("drag", (event) => {
-            console.log("dragging");
-        });
-
-        menuFish.addEventListener("dragstart", (event) => {
-            // store a ref. on the dragged elem
-            draggedFish = event.target;
-            // make it half transparent
-            event.target.classList.add("dragging");
-        });
-
-        menuFish.addEventListener("dragend", (event) => {
-            // reset the transparency
-            event.target.classList.remove("dragging");
-        });
-    })
-
 })
 
 function initializeFishTank() {
@@ -130,7 +111,8 @@ function initializeFishType(fishCategory){
 function CreateMenuCategory(fishes, category){
     let strToAppend = "<div class='menu-category'><div class='menu-category-title'>" + category + " Fish</div>"
     fishes.forEach(fish => {
-        strToAppend += "<div class='menu-fish' draggable='true' Path='" + fish.Path + "'>" +
+        strToAppend += "<div class='menu-fish' draggable='true' id='" + JSON.stringify(fish) +
+            "' ondragstart='drag(event)'>" +
             "<div class='name'>" + fish.Name +
             "</div><img class='fish-thumb' src='" + fish.Thumb + "' draggable='false'\></div>"
     })
@@ -139,13 +121,12 @@ function CreateMenuCategory(fishes, category){
 }
 
 //Add fish to tank
-function AddFish(){
-    let fishClone = { ...draggedFish}
-    fishClone.id = rollingId
+function AddFish(fishJson){
+    let fish = Object.setPrototypeOf(JSON.parse(fishJson), Fish.prototype)
+    fish.id = rollingId
     rollingId++
-    console.log(fishClone)
-    //create layered image elements inside div with id
-    $(".tank").append(fishClone.BuildFish())
+    console.log(fish)
+    fish.BuildFish()
 }
 
 //Remove fish from tank
@@ -169,5 +150,18 @@ function dragLeave(e) {
 
 function drop(e) {
     e.target.classList.remove('drag-over');
-    AddFish()
+    AddFish(e.dataTransfer.getData("Fish"))
+}
+
+function drag(e){
+    e.dataTransfer.setData("Fish", e.target.id)
+}
+
+let toggle = false;
+
+function ToggleSideMenu(){
+    $('#hide-menu').toggleClass('show-menu');
+    $('#side-menu-button').toggleClass('show-side-menu-button');
+    document.getElementById("side-menu-button").innerHTML = toggle ? "Show Fish" : "Hide Fish"
+    toggle = !toggle
 }
