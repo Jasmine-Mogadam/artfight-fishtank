@@ -111,10 +111,10 @@ function initializeFishType(fishCategory){
 function CreateMenuCategory(fishes, category){
     let strToAppend = "<div class='menu-category'><div class='menu-category-title'>" + category + " Fish</div>"
     fishes.forEach(fish => {
-        strToAppend += "<div class='menu-fish' draggable='true' id='" + JSON.stringify(fish) +
-            "' ondragstart='drag(event)'>" +
+        strToAppend += "<div class='menu-fish' draggable='true' id='" + JSON.stringify(fish) + "'" +
+            "ondragstart='drag(event)' ontouchmove='mobileDrag(event)' ontouchend='mobileDragEnd(event)'>" +
             "<div class='name'>" + fish.Name +
-            "</div><img class='fish-thumb' src='" + fish.Thumb + "' draggable='false'\></div>"
+            "</div><img class='fish-thumb' id='" + JSON.stringify(fish) + "'src='" + fish.Thumb + "' draggable='false'\></div>"
     })
     strToAppend+= "</div></div>"
     $(".side-menu").append(strToAppend)
@@ -155,6 +155,20 @@ function drop(e) {
 
 function drag(e){
     e.dataTransfer.setData("Fish", e.target.id)
+}
+
+function mobileDrag(e){
+    console.log(e)
+    // grab the location of touch
+    var touchLocation = e.targetTouches[0];
+
+    // assign box new coordinates based on the touch.
+    e.target.style.left = touchLocation.pageX + 'px';
+    e.target.style.top = touchLocation.pageY + 'px';
+}
+
+function mobileDragEnd(e){
+    AddFish(e.target.id)
 }
 
 let toggle = false;
