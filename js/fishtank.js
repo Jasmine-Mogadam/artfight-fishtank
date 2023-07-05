@@ -7,22 +7,35 @@ const State = {
     Closed: 1
 }
 let rollingId = 0
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+class Position {
+    constructor(directionAngle, x, y) {
+        this.DirectionAngle = directionAngle
+        this.X = x
+        this.Y = y
+    }
+}
 
 class Fish {
     constructor(path) {
         this.Path = path
 
-        this.Body = this.Path + "/Body.png"
         this.ClosedEye = this.Path + "/ClosedEye.png"
         this.ClosedMouth = this.Path + "/ClosedMouth.png"
         this.OpenEye = this.Path + "/OpenEye.png"
         this.OpenMouth = this.Path + "/OpenMouth.png"
+        this.Flipper = this.Path + "/Flipper.png"
+        this.Body = this.Path + "/Body.png"
         this.Tail = this.Path + "/Tail.png"
         this.Thumb = this.Path + "/Thumb.png"
 
         this.EyeState = State.Open
         this.MouthState = State.Closed
-        this.Velocity = 0
+
+        this.Position = new Position(0, 0, 0)
+        this.Removed = false
 
         this.id = null
         this.Name = null
@@ -31,42 +44,110 @@ class Fish {
     }
 
     BuildFish(){
-        let strToAppend = "<div class='x'><div class='y'><div class='tank-fish' id='" + this.id +
-            "'>Fish Added! " + this.id
-        strToAppend+= "</div></div></div></div>"
+        let strToAppend = "<div class='tank-fish' id='" + this.id + "' width='" + this.Size + "px'>"
+        strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
+        strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
+        strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"
+        strToAppend += "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>"
+        strToAppend += "<div class='Mouth fish-part'><img src='" + this.ClosedMouth + "'\></div>"
+        strToAppend += "</div></div>"
         $(".tank").append(strToAppend)
+
+        this.Swim()
     }
 
-    Swim(){
+    async Swim(){
+        //If deg is in first or fourth quadrant, flip
+        //If position is at the edge of the tank, reverse direction
+        if(this.IsAtEdge()){
+            this.HitEdge()
+        }
+        //If position is outside tank, teleport to middle of tank
 
+        //At random:
+        // blink
+        // talk
+        // change direction
+
+        //Update position in direction at speed
+        this.UpdatePosition()
+        if(!this.Removed){
+            setTimeout(this.Swim(), 300);
+        }
+    }
+
+    IsAtEdge(){
+        let hitBoxDiameter = this.Size / 2.0
+        let xOutOfBounds = (this.Position.X - hitBoxDiameter < 0) || (this.Position.X + hitBoxDiameter > width)
+        let yOutOfBounds = (this.Position.Y - hitBoxDiameter < 0) || (this.Position.Y + hitBoxDiameter > height)
+        return xOutOfBounds || yOutOfBounds
     }
 
     //When edge is hit, flip fish and reverse velocity
     HitEdge(){
-        this.EyeState = State.Closed
-        this.MouthState = State.Open
-        this.velocity = 0
-        Flip()
-        this.EyeState = State.Open
-        this.MouthState = State.Closed
-        Swim()
+        this.Flip()
+        //Swim()
     }
 
     Flip(){
-
+        this.Blink()
+        this.Talk()
     }
 
     async Blink(){
-        this.EyeState = State.Open
-        this.EyeState = State.Closed
+        await this.SetEyeState(State.Open)
+        await this.SetEyeState(State.Closed)
         let promise = Promise.resolve(10)
         let result = await promise
-        this.EyeState = State.Open
+        await this.SetEyeState(State.Open)
     }
-}
 
-async function ReadJsonFile(url) {
-    let res = await fetch(url);
+    async Talk(){
+        await this.SetMouthState(State.Open)
+        await this.SetMouthState(State.Closed)
+        let promise = Promise.resolve(10)
+        let result = await promise
+        await this.SetMouthState(State.Open)
+    }
+
+    async SetEyeState(state){
+        //if this doesn't work, document.getElementById(this.id).querySelector(".Eye").children[0]
+        let eyeElement = document.querySelector("#" + this.id + " .Eye").children[0]
+        if(state == State.Open){
+            eyeElement.src = this.OpenEye
+        }
+        else{
+            eyeElement.src = this.ClosedEye
+        }
+        this.EyeState = state
+    }
+
+    async SetMouthState(state){
+        //if this doesn't work, document.getElementById(this.id).querySelector(".Mouth").children[0]
+        let eyeElement = document.querySelector("#" + this.id + " .Mouth").children[0]
+        if(state == State.Open){
+            eyeElement.src = this.OpenMouth
+        }
+        else{
+            eyeElement.src = this.ClosedMouth
+        }
+        this.MouthState = state
+    }
+
+    async UpdatePosition(){
+        let fishElement = document.getElementById(this.id)
+        let directionRadians = this.Position.DirectionAngle * (Math.PI / 180)
+        //do trig with direction angle and speed to find new positions
+        let newX = this.Position.X + Math.cos(directionRadians)/this.Speed
+        let newY = this.Position.Y + Math.sin(directionRadians)/this.Speed
+
+        fishElement.offsetLeft = newX
+        fishElement.offsetTop = newY
+        // if direction makes image upside down, visual flip change
+        // move to position
+        this.Position.X = newX
+        this.Position.Y = newY
+    }
 }
 
 async function AddInfoFromJsonFilesToFishes(fishes){
@@ -125,7 +206,6 @@ function AddFish(fishJson){
     let fish = Object.setPrototypeOf(JSON.parse(fishJson), Fish.prototype)
     fish.id = rollingId
     rollingId++
-    console.log(fish)
     fish.BuildFish()
 }
 
@@ -160,7 +240,7 @@ function drag(e){
 function mobileDrag(e){
     console.log(e)
     // grab the location of touch
-    var touchLocation = e.targetTouches[0];
+    let touchLocation = e.targetTouches[0];
 
     // assign box new coordinates based on the touch.
     e.target.style.left = touchLocation.pageX + 'px';

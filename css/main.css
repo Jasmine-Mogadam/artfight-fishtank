@@ -11,8 +11,8 @@
 html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
     height: 100%;
+    overflow: hidden;
 }
 
 /* Navbar styles */
@@ -52,6 +52,7 @@ html, body {
 
 /* Side menu styles */
 .side-menu {
+    overflow: hidden;
     z-index: 1;
     background-color: var(--secondary-color);
     position: fixed;
@@ -65,7 +66,7 @@ html, body {
 
 .hide-menu {
     background-color: var(--secondary-color);
-    position: absolute;
+    position: fixed;
     top:0;
     right:0;
     z-index: 1;
@@ -158,6 +159,17 @@ html, body {
     position: absolute;
     width: var(--size);
     height: var(--size);
+}
+
+.fish-part{
+    position: absolute;
+    width: inherit;
+    height: inherit;
+}
+
+.fish-part img{
+    width: inherit;
+    height: inherit;
 }
 
 .x {
