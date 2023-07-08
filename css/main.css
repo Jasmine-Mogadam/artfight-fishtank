@@ -156,13 +156,14 @@ html, body {
 }
 
 .tank-fish {
-    position: absolute;
+    position: fixed;
     width: var(--size);
     height: var(--size);
+    transition: top,left,angle, 1s;
 }
 
 .fish-part{
-    position: absolute;
+    position: fixed;
     width: inherit;
     height: inherit;
 }

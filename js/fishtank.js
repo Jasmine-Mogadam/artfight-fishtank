@@ -9,6 +9,7 @@ const State = {
 let rollingId = 0
 const width = window.innerWidth;
 const height = window.innerHeight;
+let refreshRate = 1000;
 
 class Position {
     constructor(directionAngle, x, y) {
@@ -34,16 +35,19 @@ class Fish {
         this.EyeState = State.Open
         this.MouthState = State.Closed
 
-        this.Position = new Position(0, 0, 0)
         this.Removed = false
-
+        this.Position = null
         this.id = null
         this.Name = null
         this.Size = null
         this.Speed = null
+        this.Element = null
     }
 
-    BuildFish(){
+    async BuildFish(){
+        this.Position.X -= this.Size * 1.5
+        this.Position.Y -= this.Size
+
         let strToAppend = "<div class='tank-fish' id='" + this.id + "' width='" + this.Size + "px'>"
         strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
         strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
@@ -53,26 +57,30 @@ class Fish {
         strToAppend += "</div></div>"
         $(".tank").append(strToAppend)
 
-        this.Swim()
+        this.Element = document.getElementById(this.id)
+
+        this.Swim().then(r => this.Element.remove())
     }
 
     async Swim(){
-        //If deg is in first or fourth quadrant, flip
-        //If position is at the edge of the tank, reverse direction
-        if(this.IsAtEdge()){
-            this.HitEdge()
-        }
-        //If position is outside tank, teleport to middle of tank
+        while(!this.Removed){
+            //If deg is in first or fourth quadrant, flip
+            //If position is at the edge of the tank, reverse direction
+            if(this.IsAtEdge()){
+                await this.HitEdge()
+            }
+            //If position is outside tank, teleport to middle of tank
+            this.RandomEvent(this.Blink.bind(this), .10)
+            this.RandomEvent(this.Talk.bind(this), .05)
+            this.RandomEvent(this.RandomChangeDirection.bind(this), .05)
+            //At random:
+            // blink
+            // talk
+            // change direction
 
-        //At random:
-        // blink
-        // talk
-        // change direction
-
-        //Update position in direction at speed
-        this.UpdatePosition()
-        if(!this.Removed){
-            setTimeout(this.Swim(), 300);
+            //Update position in direction at speed
+            await this.UpdatePosition()
+            await new Promise(r => setTimeout(r, refreshRate));
         }
     }
 
@@ -80,39 +88,50 @@ class Fish {
         let hitBoxDiameter = this.Size / 2.0
         let xOutOfBounds = (this.Position.X - hitBoxDiameter < 0) || (this.Position.X + hitBoxDiameter > width)
         let yOutOfBounds = (this.Position.Y - hitBoxDiameter < 0) || (this.Position.Y + hitBoxDiameter > height)
+        console.log("hitBoxDia: " + hitBoxDiameter + " | xBounds: " + xOutOfBounds + " | xBounds: "  + yOutOfBounds)
         return xOutOfBounds || yOutOfBounds
     }
 
     //When edge is hit, flip fish and reverse velocity
-    HitEdge(){
-        this.Flip()
-        //Swim()
+    async HitEdge(){
+        await this.Flip()
+        await this.UpdatePosition()
     }
 
-    Flip(){
+    async RandomEvent(event, chance){
+        let eventRoll = Math.random()
+        if(eventRoll < chance){
+            event()
+        }
+    }
+
+    async RandomChangeDirection(){
+        let directionChange = this.Position.DirectionAngle + ((Math.random() - .05) * 60)
+        this.SetDirection(directionChange)
+    }
+
+    async Flip(){
         this.Blink()
         this.Talk()
+        this.SetDirection(-this.Position.DirectionAngle)
     }
 
     async Blink(){
         await this.SetEyeState(State.Open)
         await this.SetEyeState(State.Closed)
-        let promise = Promise.resolve(10)
-        let result = await promise
+        await new Promise(r => setTimeout(r, 300));
         await this.SetEyeState(State.Open)
     }
 
     async Talk(){
         await this.SetMouthState(State.Open)
         await this.SetMouthState(State.Closed)
-        let promise = Promise.resolve(10)
-        let result = await promise
+        await new Promise(r => setTimeout(r, 300));
         await this.SetMouthState(State.Open)
     }
 
     async SetEyeState(state){
-        //if this doesn't work, document.getElementById(this.id).querySelector(".Eye").children[0]
-        let eyeElement = document.querySelector("#" + this.id + " .Eye").children[0]
+        let eyeElement = this.Element.querySelector(".Eye").children[0]
         if(state == State.Open){
             eyeElement.src = this.OpenEye
         }
@@ -123,8 +142,7 @@ class Fish {
     }
 
     async SetMouthState(state){
-        //if this doesn't work, document.getElementById(this.id).querySelector(".Mouth").children[0]
-        let eyeElement = document.querySelector("#" + this.id + " .Mouth").children[0]
+        let eyeElement = this.Element.querySelector(".Mouth").children[0]
         if(state == State.Open){
             eyeElement.src = this.OpenMouth
         }
@@ -134,19 +152,31 @@ class Fish {
         this.MouthState = state
     }
 
+    async SetDirection(angle){
+        this.Position.DirectionAngle = angle
+        let unitAngle = angle % 360
+        console.log("angle: " + angle + " | unitAngle: " + unitAngle)
+        let scale = unitAngle < 270 && unitAngle > 180 ? -1 : 1
+        this.Element.style.transform = "rotate(" + angle + "deg) scaleX(" + scale + ")"
+        this.Element.style.angle = angle
+    }
+
     async UpdatePosition(){
-        let fishElement = document.getElementById(this.id)
         let directionRadians = this.Position.DirectionAngle * (Math.PI / 180)
         //do trig with direction angle and speed to find new positions
-        let newX = this.Position.X + Math.cos(directionRadians)/this.Speed
-        let newY = this.Position.Y + Math.sin(directionRadians)/this.Speed
+        let newX = this.Position.X + Math.cos(directionRadians) * this.Speed * refreshRate/1000
+        let newY = this.Position.Y + Math.sin(directionRadians) * this.Speed * refreshRate/1000
 
-        fishElement.offsetLeft = newX
-        fishElement.offsetTop = newY
-        // if direction makes image upside down, visual flip change
+        this.Element.style.left = newX + "px"
+        this.Element.style.top = newY + "px"
+
         // move to position
         this.Position.X = newX
         this.Position.Y = newY
+    }
+
+    Remove(){
+        this.Removed = true
     }
 }
 
@@ -202,10 +232,11 @@ function CreateMenuCategory(fishes, category){
 }
 
 //Add fish to tank
-function AddFish(fishJson){
+function AddFish(fishJson, xPos, yPos){
     let fish = Object.setPrototypeOf(JSON.parse(fishJson), Fish.prototype)
     fish.id = rollingId
     rollingId++
+    fish.Position = new Position(0, xPos, yPos)
     fish.BuildFish()
 }
 
@@ -230,7 +261,7 @@ function dragLeave(e) {
 
 function drop(e) {
     e.target.classList.remove('drag-over');
-    AddFish(e.dataTransfer.getData("Fish"))
+    AddFish(e.dataTransfer.getData("Fish"), e.clientX, e.clientY)
 }
 
 function drag(e){
@@ -248,7 +279,8 @@ function mobileDrag(e){
 }
 
 function mobileDragEnd(e){
-    AddFish(e.target.id)
+    let touchLocation = e.targetTouches[0];
+    AddFish(e.target.id, e.pageX, e.pageY)
 }
 
 let toggle = false;
