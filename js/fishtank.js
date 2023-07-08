@@ -88,7 +88,7 @@ class Fish {
         let hitBoxDiameter = this.Size / 2.0
         let xOutOfBounds = (this.Position.X - hitBoxDiameter < 0) || (this.Position.X + hitBoxDiameter > width)
         let yOutOfBounds = (this.Position.Y - hitBoxDiameter < 0) || (this.Position.Y + hitBoxDiameter > height)
-        console.log("hitBoxDia: " + hitBoxDiameter + " | xBounds: " + xOutOfBounds + " | xBounds: "  + yOutOfBounds)
+        //console.log("hitBoxDia: " + hitBoxDiameter + " | xBounds: " + xOutOfBounds + " | xBounds: "  + yOutOfBounds)
         return xOutOfBounds || yOutOfBounds
     }
 
@@ -124,10 +124,10 @@ class Fish {
     }
 
     async Talk(){
-        await this.SetMouthState(State.Open)
         await this.SetMouthState(State.Closed)
-        await new Promise(r => setTimeout(r, 300));
         await this.SetMouthState(State.Open)
+        await new Promise(r => setTimeout(r, 300));
+        await this.SetMouthState(State.Closed)
     }
 
     async SetEyeState(state){
@@ -155,8 +155,10 @@ class Fish {
     async SetDirection(angle){
         this.Position.DirectionAngle = angle
         let unitAngle = angle % 360
-        console.log("angle: " + angle + " | unitAngle: " + unitAngle)
-        let scale = unitAngle < 270 && unitAngle > 180 ? -1 : 1
+        if(unitAngle < 0){
+            unitAngle += 360
+        }
+        let scale = unitAngle < 270 && unitAngle > 90 ? -1 : 1
         this.Element.style.transform = "rotate(" + angle + "deg) scaleX(" + scale + ")"
         this.Element.style.angle = angle
     }
@@ -173,6 +175,8 @@ class Fish {
         // move to position
         this.Position.X = newX
         this.Position.Y = newY
+
+        await this.SetDirection(this.Position.DirectionAngle)
     }
 
     Remove(){
@@ -269,18 +273,13 @@ function drag(e){
 }
 
 function mobileDrag(e){
-    console.log(e)
     // grab the location of touch
-    let touchLocation = e.targetTouches[0];
-
-    // assign box new coordinates based on the touch.
-    e.target.style.left = touchLocation.pageX + 'px';
-    e.target.style.top = touchLocation.pageY + 'px';
+    this.startX = e.touches[0].pageX;
+    this.startY = e.touches[0].pageY;
 }
 
 function mobileDragEnd(e){
-    let touchLocation = e.targetTouches[0];
-    AddFish(e.target.id, e.pageX, e.pageY)
+    AddFish(e.target.id, e.changedTouches[0].pageX, e.changedTouches[0].pageY)
 }
 
 let toggle = false;
