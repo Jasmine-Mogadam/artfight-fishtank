@@ -79,7 +79,7 @@ class Fish {
             // change direction
 
             //Update position in direction at speed
-            await this.UpdatePosition()
+            await this.UpdatePositionWithVelocity()
             await new Promise(r => setTimeout(r, refreshRate));
         }
     }
@@ -94,8 +94,35 @@ class Fish {
 
     //When edge is hit, flip fish and reverse velocity
     async HitEdge(){
-        await this.Flip()
-        await this.UpdatePosition()
+        await this.MoveToEdge()
+        await this.UpdatePosition().then(r => {
+            this.PlayFishHitEdgeSound()
+            this.Flip()
+            this.UpdatePositionWithVelocity()
+        })
+    }
+
+    async MoveToEdge(){
+        //Set position to wall
+        let hitBoxDiameter = this.Size / 2.0
+        if(this.Position.X - hitBoxDiameter < 0){
+            this.Position.X = 0 + hitBoxDiameter
+        }
+        else if(this.Position.X + hitBoxDiameter > width){
+            this.Position.X = width - hitBoxDiameter
+        }
+        if(this.Position.Y - hitBoxDiameter < 0){
+            this.Position.Y = 0 + hitBoxDiameter
+        }
+        else if(this.Position.Y + hitBoxDiameter > height){
+            this.Position.Y = height - hitBoxDiameter
+        }
+    }
+
+    async PlayFishHitEdgeSound(){
+        let randomGlassTap = Math.floor(Math.random() * 3)
+        let audio = new Audio("Sound/glassTap-" + randomGlassTap + ".mp3");
+        audio.play();
     }
 
     async RandomEvent(event, chance){
@@ -106,7 +133,7 @@ class Fish {
     }
 
     async RandomChangeDirection(){
-        let directionChange = this.Position.DirectionAngle + ((Math.random() - .05) * 60)
+        let directionChange = this.Position.DirectionAngle + ((Math.random() - .5) * 60)
         this.SetDirection(directionChange)
     }
 
@@ -163,7 +190,7 @@ class Fish {
         this.Element.style.angle = angle
     }
 
-    async UpdatePosition(){
+    async UpdatePositionWithVelocity(){
         let directionRadians = this.Position.DirectionAngle * (Math.PI / 180)
         //do trig with direction angle and speed to find new positions
         let newX = this.Position.X + Math.cos(directionRadians) * this.Speed * refreshRate/1000
@@ -176,6 +203,12 @@ class Fish {
         this.Position.X = newX
         this.Position.Y = newY
 
+        await this.SetDirection(this.Position.DirectionAngle)
+    }
+
+    async UpdatePosition(){
+        this.Element.style.left = this.Position.X
+        this.Element.style.top = this.Position.Y
         await this.SetDirection(this.Position.DirectionAngle)
     }
 
