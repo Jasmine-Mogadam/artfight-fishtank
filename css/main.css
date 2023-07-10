@@ -171,6 +171,7 @@ html, body {
 .fish-part img{
     width: inherit;
     height: inherit;
+    transition: all, 1s;
 }
 
 .x {

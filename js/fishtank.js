@@ -63,6 +63,7 @@ class Fish {
     }
 
     async Swim(){
+        this.StartLoopingAnimations()
         while(!this.Removed){
             //If deg is in first or fourth quadrant, flip
             //If position is at the edge of the tank, reverse direction
@@ -84,7 +85,30 @@ class Fish {
         }
     }
 
+    async StartLoopingAnimations(){
+        let flipper = this.Element.querySelector(".Flipper").children[0]
+        let tail = this.Element.querySelector(".Tail").children[0]
+        while(!this.Removed) {
+            await Promise.all([this.FlipperFlop(flipper), this.TailSwish(tail)])
+        }
+    }
+
+    async FlipperFlop(flipper){
+        flipper.style.transform = "rotate(-1deg) scaleY(1)"
+        await new Promise(r => setTimeout(r, 500));
+        flipper.style.transform = "rotate(30deg) scaleY(.5)"
+        await new Promise(r => setTimeout(r, 500));
+    }
+
+    async TailSwish(tail){
+        tail.style.transform = "rotate(-30deg) scaleY(1.2)"
+        await new Promise(r => setTimeout(r, 500));
+        tail.style.transform = "rotate(30deg) scaleY(.7)"
+        await new Promise(r => setTimeout(r, 500));
+    }
+
     IsAtEdge(){
+        console.log(1)
         let hitBoxDiameter = this.Size / 2.0
         let xOutOfBounds = (this.Position.X - hitBoxDiameter < 0) || (this.Position.X + hitBoxDiameter > width)
         let yOutOfBounds = (this.Position.Y - hitBoxDiameter < 0) || (this.Position.Y + hitBoxDiameter > height)
@@ -94,6 +118,7 @@ class Fish {
 
     //When edge is hit, flip fish and reverse velocity
     async HitEdge(){
+        console.log(2)
         await this.MoveToEdge()
         await this.UpdatePosition().then(r => {
             this.PlayFishHitEdgeSound()
@@ -138,22 +163,23 @@ class Fish {
     }
 
     async Flip(){
+        console.log(3)
         this.Blink()
         this.Talk()
-        this.SetDirection(-this.Position.DirectionAngle)
+        this.SetDirection(this.Position.DirectionAngle + 180)
     }
 
     async Blink(){
         await this.SetEyeState(State.Open)
         await this.SetEyeState(State.Closed)
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 500));
         await this.SetEyeState(State.Open)
     }
 
     async Talk(){
         await this.SetMouthState(State.Closed)
         await this.SetMouthState(State.Open)
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 500));
         await this.SetMouthState(State.Closed)
     }
 
@@ -186,11 +212,12 @@ class Fish {
             unitAngle += 360
         }
         let scale = unitAngle < 270 && unitAngle > 90 ? -1 : 1
-        this.Element.style.transform = "rotate(" + angle + "deg) scaleX(" + scale + ")"
+        this.Element.style.transform = "rotate(" + angle + "deg) scaleY(" + scale + ")"
         this.Element.style.angle = angle
     }
 
     async UpdatePositionWithVelocity(){
+        console.log(4)
         let directionRadians = this.Position.DirectionAngle * (Math.PI / 180)
         //do trig with direction angle and speed to find new positions
         let newX = this.Position.X + Math.cos(directionRadians) * this.Speed * refreshRate/1000
