@@ -6,9 +6,10 @@ const State = {
     Open: 0,
     Closed: 1
 }
-let rollingId = 0
+const audioContext = new AudioContext();
 const width = window.innerWidth;
 const height = window.innerHeight;
+let rollingId = 0
 let refreshRate = 1000;
 
 class Position {
@@ -59,6 +60,7 @@ class Fish {
 
         this.Element = document.getElementById(this.id)
 
+        this.PlayRandomizedSound("waterDrop")
         this.Swim().then(r => this.Element.remove())
     }
 
@@ -121,7 +123,7 @@ class Fish {
         console.log(2)
         await this.MoveToEdge()
         await this.UpdatePosition().then(r => {
-            this.PlayFishHitEdgeSound()
+            this.PlayRandomizedSound("glassTap")
             this.Flip()
             this.UpdatePositionWithVelocity()
         })
@@ -146,8 +148,18 @@ class Fish {
 
     async PlayFishHitEdgeSound(){
         let randomGlassTap = Math.floor(Math.random() * 3)
-        let audio = new Audio("Sound/glassTap-" + randomGlassTap + ".mp3");
-        audio.play();
+        let randomPitch = Math.random()*.5 + .75 //.75 to 1.25
+
+        loadSample("Sound/glassTap-" + randomGlassTap + ".mp3")
+            .then(sample => playSample(sample, randomPitch));
+    }
+
+    async PlayRandomizedSound(soundName){
+        let randomGlassTap = Math.floor(Math.random() * 3)
+        let randomPitch = Math.random() + .5
+
+        loadSample("Sound/" + soundName + "-" + randomGlassTap + ".mp3")
+            .then(sample => playSample(sample, randomPitch));
     }
 
     async RandomEvent(event, chance){
@@ -242,6 +254,20 @@ class Fish {
     Remove(){
         this.Removed = true
     }
+}
+
+function loadSample(url) {
+    return fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(buffer => audioContext.decodeAudioData(buffer));
+}
+
+function playSample(sample, rate) {
+    const source = audioContext.createBufferSource();
+    source.buffer = sample;
+    source.playbackRate.value = rate;
+    source.connect(audioContext.destination);
+    source.start(0);
 }
 
 async function AddInfoFromJsonFilesToFishes(fishes){
