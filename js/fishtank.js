@@ -1,5 +1,5 @@
 const FishCategories = [
-    {Count: 1, FolderName: "ArtFight", DisplayName: "Art Fight"},
+    {Count: 2, FolderName: "ArtFight", DisplayName: "Art Fight"},
     {Count: 0, FolderName: "Extra", DisplayName: "Extra"}
 ]
 const State = {
@@ -53,8 +53,8 @@ class Fish {
         strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
         strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
         strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"
-        strToAppend += "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>"
         strToAppend += "<div class='Mouth fish-part'><img src='" + this.ClosedMouth + "'\></div>"
+        strToAppend += "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>"
         strToAppend += "</div></div>"
         $(".tank").append(strToAppend)
 
@@ -96,16 +96,16 @@ class Fish {
     }
 
     async FlipperFlop(flipper){
-        flipper.style.transform = "rotate(-1deg) scaleY(1)"
-        await new Promise(r => setTimeout(r, 500));
         flipper.style.transform = "rotate(30deg) scaleY(.5)"
+        await new Promise(r => setTimeout(r, 500));
+        flipper.style.transform = "rotate(-5deg) scaleY(1)"
         await new Promise(r => setTimeout(r, 500));
     }
 
     async TailSwish(tail){
-        tail.style.transform = "rotate(-30deg) scaleY(1.2)"
+        tail.style.transform = "rotate(-20deg) scaleY(1.2)"
         await new Promise(r => setTimeout(r, 500));
-        tail.style.transform = "rotate(30deg) scaleY(.7)"
+        tail.style.transform = "rotate(15deg) scaleY(.8)"
         await new Promise(r => setTimeout(r, 500));
     }
 
