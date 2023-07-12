@@ -142,6 +142,7 @@ html, body {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    background-color: transparent;
 }
 
 .menu-fish .name {
@@ -170,7 +171,6 @@ html, body {
     position: fixed;
     right: 0;
     top: 0;
-    //z-index: -1;
 }
 
 /* KEYFRAMES */
@@ -438,13 +438,13 @@ html, body {
 
 .fish-part{
     position: fixed;
-    width: inherit;
-    height: inherit;
+    width: 100%;
+    height: 100%;
 }
 
 .fish-part img{
-    width: inherit;
-    height: inherit;
+    width: 100%;
+    height: 100%;
     transition: all, 1s;
 }
 

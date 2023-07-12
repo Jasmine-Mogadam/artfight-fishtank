@@ -1,6 +1,6 @@
 const FishCategories = [
-    {Count: 2, FolderName: "ArtFight", DisplayName: "Art Fight"},
-    {Count: 0, FolderName: "Extra", DisplayName: "Extra"}
+    {Count: 5, FolderName: "ArtFight", DisplayName: "Art Fight"},
+    {Count: 1, FolderName: "Extra", DisplayName: "Extra"}
 ]
 const State = {
     Open: 0,
@@ -49,7 +49,8 @@ class Fish {
         this.Position.X -= this.Size * 1.5
         this.Position.Y -= this.Size
 
-        let strToAppend = "<div class='tank-fish' id='" + this.id + "' width='" + this.Size + "px'>"
+        let strToAppend = "<div class='tank-fish' id='" + this.id + "' style='width:" + this.Size + "px;" +
+            "height:" + this.Size + "px;'>"
         strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
         strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
         strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"
