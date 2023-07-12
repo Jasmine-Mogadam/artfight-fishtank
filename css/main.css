@@ -23,45 +23,9 @@ html, body {
     background-color: var(--light-color);
 }
 
-/* Navbar styles */
-.navbar {
-    z-index: 1;
-    background-color: var(--primary-color);
-    height: 50px;
-    width: 100%;
-}
-
-/* Navigation bar list styles */
-.navbar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center; /* Center the list items horizontally */
-    align-items: center;
-    height: 100%;
-}
-
-.navbar li {
-    margin: 0 10px; /* Add some spacing between list items */
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease; /* Add smooth transition for hover effect */
-}
-
-.navbar a:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
 /* Side menu styles */
 .side-menu {
-    overflow: hidden;
-    z-index: 1;
+    z-index: 2;
     background-color: var(--secondary-color);
     position: fixed;
     top: 0;
@@ -72,12 +36,17 @@ html, body {
     transition: right 0.3s ease; /* Adding smooth transition when retracting */
 }
 
+.side-menu-contents{
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
 .hide-menu {
+    z-index: 2;
     background-color: var(--secondary-color);
     position: fixed;
     top:0;
     right:0;
-    z-index: 1;
     width: 300px;
     height: 100%;
     padding: 20px;
@@ -100,27 +69,50 @@ html, body {
     -ms-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
 }
-.hide-side-menu-button{
-    cursor:pointer;
-    -webkit-transform: translate3d(-10px,0,0);
-    -moz-transform: translate3d(-10px,0,0);
-    -o-transform: translate3d(-10px,0,0);
-    -ms-transform: translate3d(-10px,0,0);
-    transform: translate3d(-10px,0,0);
-    -webkit-transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -ms-transition: all 0.3s linear;
-    -o-transition: all 0.3s linear;
-    transition: all 0.3s linear;
+
+/* Makes fish left align so name length doesn't effect their alignment*/
+#hide-menu-fish img{
+    display: block;
+    margin-right: auto; /* this is supposed to work but doesn't >: */
 }
 
-.show-side-menu-button {
-    margin-right: 310px;
-    -webkit-transform: translate3d(0,0,0);
-    -moz-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    -ms-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
+.side-menu-button {
+    z-index: 1;
+    position: absolute;
+    width: 150px;
+    left: -104px;
+    padding: 15px 32px;
+    transform: rotate(90deg);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background-color: inherit;
+}
+
+#hide-menu-fish{
+    background-color: var(--primary-color);
+}
+
+#hide-menu-about{
+    background-color: var(--secondary-color);
+}
+
+#hide-menu-settings{
+    background-color: var(--tertiary-color);
+}
+
+#button-fish{
+    top: 25%;
+}
+
+#button-about{
+    top: 50%;
+}
+
+#button-settings{
+    top: 75%;
 }
 
 #menu-tray-top{
@@ -163,253 +155,16 @@ html, body {
     margin: 0 auto;
 }
 
-/* Tank styles */
-
-#bubble-wrap {
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-}
-
-/* KEYFRAMES */
-
-@-webkit-keyframes animateBubble {
-    0% {
-        margin-top: 1000px;
-    }
-    100% {
-        margin-top: -100%;
-    }
-}
-
-@-moz-keyframes animateBubble {
-    0% {
-        margin-top: 1000px;
-    }
-    100% {
-        margin-top: -100%;
-    }
-}
-
-@keyframes animateBubble {
-    0% {
-        margin-top: 1000px;
-    }
-    100% {
-        margin-top: -100%;
-    }
-}
-
-@-webkit-keyframes sideWays {
-    0% {
-        margin-left:0px;
-    }
-    100% {
-        margin-left:50px;
-    }
-}
-
-@-moz-keyframes sideWays {
-    0% {
-        margin-left:0px;
-    }
-    100% {
-        margin-left:50px;
-    }
-}
-
-@keyframes sideWays {
-    0% {
-        margin-left:0px;
-    }
-    100% {
-        margin-left:50px;
-    }
-}
-
-/* ANIMATIONS */
-
-.x1 {
-    -webkit-animation: animateBubble 25s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 25s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    animation: animateBubble 25s linear infinite, sideWays 2s ease-in-out infinite alternate;
-
-    left: -5%;
-    top: 5%;
-
-    -webkit-transform: scale(0.6);
-    -moz-transform: scale(0.6);
-    transform: scale(0.6);
-}
-
-.x2 {
-    -webkit-animation: animateBubble 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
-    animation: animateBubble 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
-
-    left: 5%;
-    top: 80%;
-
-    -webkit-transform: scale(0.4);
-    -moz-transform: scale(0.4);
-    transform: scale(0.4);
-}
-
-.x3 {
-    -webkit-animation: animateBubble 28s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 28s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    animation: animateBubble 28s linear infinite, sideWays 2s ease-in-out infinite alternate;
-
-    left: 10%;
-    top: 40%;
-
-    -webkit-transform: scale(0.7);
-    -moz-transform: scale(0.7);
-    transform: scale(0.7);
-}
-
-.x4 {
-    -webkit-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
-    animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
-
-    left: 20%;
-    top: 0;
-
-    -webkit-transform: scale(0.3);
-    -moz-transform: scale(0.3);
-    transform: scale(0.3);
-}
-
-.x5 {
-    -webkit-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
-    animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
-
-    left: 30%;
-    top: 50%;
-
-    -webkit-transform: scale(0.5);
-    -moz-transform: scale(0.5);
-    transform: scale(0.5);
-}
-
-.x6 {
-    -webkit-animation: animateBubble 21s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 21s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    animation: animateBubble 21s linear infinite, sideWays 2s ease-in-out infinite alternate;
-
-    left: 50%;
-    top: 0;
-
-    -webkit-transform: scale(0.8);
-    -moz-transform: scale(0.8);
-    transform: scale(0.8);
-}
-
-.x7 {
-    -webkit-animation: animateBubble 20s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 20s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    animation: animateBubble 20s linear infinite, sideWays 2s ease-in-out infinite alternate;
-
-    left: 65%;
-    top: 70%;
-
-    -webkit-transform: scale(0.4);
-    -moz-transform: scale(0.4);
-    transform: scale(0.4);
-}
-
-.x8 {
-    -webkit-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
-    animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
-
-    left: 80%;
-    top: 10%;
-
-    -webkit-transform: scale(0.3);
-    -moz-transform: scale(0.3);
-    transform: scale(0.3);
-}
-
-.x9 {
-    -webkit-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
-    animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
-
-    left: 90%;
-    top: 50%;
-
-    -webkit-transform: scale(0.6);
-    -moz-transform: scale(0.6);
-    transform: scale(0.6);
-}
-
-.x10 {
-    -webkit-animation: animateBubble 26s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    -moz-animation: animateBubble 26s linear infinite, sideWays 2s ease-in-out infinite alternate;
-    animation: animateBubble 26s linear infinite, sideWays 2s ease-in-out infinite alternate;
-
-    left: 80%;
-    top: 80%;
-
-    -webkit-transform: scale(0.3);
-    -moz-transform: scale(0.3);
-    transform: scale(0.3);
-}
-
-/* OBJECTS */
-
-.bubble {
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-
-    -webkit-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2), inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
-    -moz-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2), inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
-    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2), inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
-
-    height: 200px;
-    position: absolute;
-    width: 200px;
-}
-
-.bubble:after {
-    background: -moz-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,0.5)), color-stop(70%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* IE10+ */
-    background: radial-gradient(ellipse at center,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-
-    -webkit-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
-    -moz-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
-
-    content: "";
-    height: 180px;
-    left: 10px;
-    position: absolute;
-    width: 180px;
-}
-
 .tank {
     background: radial-gradient(circle, var(--blue-1) 0%, var(--blue-2) 57%, var(--blue-3) 100%);
     background-size: 1500% 1000%;
     animation: gradient 30s ease infinite;
     position: absolute;
-    top: 50px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    cursor:url(../Images/Cursor.png), auto;
 }
 
 @keyframes gradient {
