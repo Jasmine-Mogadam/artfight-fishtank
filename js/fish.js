@@ -6,6 +6,22 @@ const audioContext = new AudioContext();
 const width = window.innerWidth;
 const height = window.innerHeight;
 
+let refreshRate = 1000;
+let sizeMultiplier = 1;
+let speedMultiplier = 1;
+
+function updateRefreshRate() {
+    refreshRate = document.getElementById("refreshRate").value;
+}
+
+function updateSizeMultiplier() {
+    sizeMultiplier = document.getElementById("sizeMultiplier").value;
+}
+
+function updateSpeedMultiplier() {
+    speedMultiplier = document.getElementById("speedMultiplier").value;
+}
+
 class Position {
     constructor(directionAngle, x, y) {
         this.DirectionAngle = directionAngle
@@ -40,11 +56,11 @@ class Fish {
     }
 
     async BuildFish(){
-        this.Position.X -= this.Size * 1.5
-        this.Position.Y -= this.Size
+        this.Size = this.Size * sizeMultiplier;
+        this.Speed = this.Speed * speedMultiplier;
 
-        let strToAppend = "<div class='tank-fish' id='" + this.id + "' style='width:" + this.Size + "px;" +
-            "height:" + this.Size + "px;'>"
+        let strToAppend = "<div class='tank-fish' id='" + this.id +
+            "' style='width:" + this.Size + "px; height:" + this.Size + "px;'>"
         strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
         strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
         strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"

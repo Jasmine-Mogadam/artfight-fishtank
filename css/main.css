@@ -115,6 +115,10 @@ html, body {
     top: 75%;
 }
 
+input{
+    margin-bottom: 50px;
+}
+
 #menu-tray-top{
     position: fixed;
     width: 270px;

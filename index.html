@@ -59,15 +59,22 @@
       <h1>Settings</h1>
       <p>Change the fish tank to fit your needs!</p>
       <form>
-        <label>Refresh Rate</label>
+        <label><h4>Refresh Rate</h4></label>
         <p>The time in milliseconds it takes for fish position to update. Increase this for better performance.</p>
-        <label>Fish Size Multiplier</label>
-        <input type="text">
-        <label>Fish Speed Multiplier</label>
-        <input type="text">
-        <label>Tank Export/Import</label>
-        <input type="text">
+        <input type="text" id="refreshRate" onchange="updateRefreshRate()" placeholder="1000">
+        <br>
+        <label><h4>Fish Size Multiplier</h4></label>
+        <p>Multiplies all fish sizes. Does not apply retroactively</p>
+        <input type="text" id="sizeMultiplier" onchange="updateSizeMultiplier()" placeholder="1">
+        <br>
+        <label><h4>Fish Speed Multiplier</h4></label>
+        <p>Multiplies all fish speeds. Does not apply retroactively</p>
+        <input type="text" id="speedMultiplier" onchange="updateSpeedMultiplier()" placeholder="1">
+        <br>
+        <label><h4>Tank Export/Import</h4></label>
         <p>Copy the string below to save your tank or paste in a string from a previous tank.</p>
+        <p> !! NOT CURRENTLY IMPLEMENTED !!</p>
+        <input type="text" id="fish-tank-metadata">
       </form>
     </nav>
   </div>

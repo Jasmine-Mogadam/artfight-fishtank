@@ -3,7 +3,6 @@ const FishCategories = [
     {Count: 1, FolderName: "Extra", DisplayName: "Extra"},
 ]
 let rollingId = 0
-let refreshRate = 1000;
 
 function loadSample(url) {
     return fetch(url)
