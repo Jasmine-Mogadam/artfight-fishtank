@@ -47,7 +47,7 @@ class Fish {
         this.MouthState = State.Closed
 
         this.Removed = false
-        this.Position = null
+        this.Position = new Position(0, this.Size*2, this.Size*2)
         this.id = null
         this.Name = null
         this.Size = null
@@ -56,16 +56,20 @@ class Fish {
     }
 
     async BuildFish(){
-        this.Size = this.Size * sizeMultiplier;
-        this.Speed = this.Speed * speedMultiplier;
+        this.Size = this.Size * sizeMultiplier * (Math.random()/2 + .75);
+        this.Speed = this.Speed * speedMultiplier * (Math.random()/2 + .75);
+
+        if(this.Position == null){
+            this.Position = new Position(0, this.Size * 2, this.Size * 2)
+        }
 
         let strToAppend = "<div class='tank-fish' id='" + this.id +
             "' style='width:" + this.Size + "px; height:" + this.Size + "px;'>"
         strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
         strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
-        strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"
         strToAppend += "<div class='Mouth fish-part'><img src='" + this.ClosedMouth + "'\></div>"
         strToAppend += "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>"
+        strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"
         strToAppend += "</div></div>"
         $(".tank").append(strToAppend)
 

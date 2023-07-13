@@ -1,7 +1,8 @@
 const FishCategories = [
-    {Count: 5, FolderName: "ArtFight", DisplayName: "Art Fight"},
+    {Count: 13, FolderName: "ArtFight", DisplayName: "Art Fight"},
     {Count: 1, FolderName: "Extra", DisplayName: "Extra"},
 ]
+let allJsonFish = []
 let rollingId = 0
 
 function loadSample(url) {
@@ -50,10 +51,12 @@ function initializeFishType(fishCategory){
 function CreateMenuCategory(fishes, category){
     let strToAppend = "<div class='menu-category'><div class='menu-category-title'>" + category + " Fish</div>"
     fishes.forEach(fish => {
-        strToAppend += "<div class='menu-fish' draggable='true' id='" + JSON.stringify(fish) + "'" +
+        let fishJson = JSON.stringify(fish)
+        strToAppend += "<div class='menu-fish' draggable='true' id='" + fishJson + "'" +
             "ondragstart='drag(event)' ontouchmove='mobileDrag(event)' ontouchend='mobileDragEnd(event)'>" +
             "<div class='name'>" + fish.Name +
-            "</div><img class='fish-thumb' id='" + JSON.stringify(fish) + "'src='" + fish.Thumb + "' draggable='false'\></div>"
+            "</div><img class='fish-thumb' id='" + fishJson + "'src='" + fish.Thumb + "' draggable='false'\></div>"
+        allJsonFish.push(fishJson)
     })
     strToAppend+= "</div></div>"
     $("#fish-menu-contents").append(strToAppend)
@@ -106,4 +109,18 @@ let toggle = false;
 function ToggleSideMenu(name){
     $('#hide-menu-' + name).toggleClass('show-menu');
     toggle = !toggle
+}
+
+function AddOneOfEach(){
+    allJsonFish.forEach(fishJson => {
+        AddFish(fishJson, 500, 500)
+    })
+}
+
+function AddRandomFish(){
+    let randomFishCount = document.getElementById('input-AddRandomFish').value
+    for(let i = 0; i < randomFishCount; i++){
+        let fishJson = allJsonFish[Math.floor(Math.random() * allJsonFish.length)]
+        AddFish(fishJson, 500, 500)
+    }
 }

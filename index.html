@@ -16,8 +16,17 @@
     <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleSideMenu('fish')">
       Fish
     </button>
-    <nav class="side-menu-contents" id="fish-menu-contents">
+    <nav class="side-menu-contents fish-menu" id="fish-menu-contents">
       <h1>Fish</h1>
+      <button class="button" id="button-AddOneOfEach" type="button" onclick="AddOneOfEach()">
+        Add One Of Each Fish
+      </button>
+      <div class="button-with-input">
+        <button class="button" id="button-AddRandomFish" type="button" onclick="AddRandomFish()">
+          Add Random Fish
+        </button>
+        <input type="number" id="input-AddRandomFish" value="1">
+      </div>
       <p>Drag the fish you want into the tank!</p>
     </nav>
   </div>
@@ -26,7 +35,7 @@
     <button class="side-menu-button" id="button-about" type="button" onclick="ToggleSideMenu('about')">
       About
     </button>
-    <nav class="side-menu-contents">
+    <nav class="side-menu-contents about-menu">
       <div class="content">
         <h1>Instructions</h1>
         <p>Welcome to the fish tank! Here you can find all sorts of fishes. Click the tab labelled "Fish" and drag
@@ -55,21 +64,21 @@
     <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleSideMenu('settings')">
       Settings
     </button>
-    <nav class="side-menu-contents">
+    <nav class="side-menu-contents settings-menu">
       <h1>Settings</h1>
       <p>Change the fish tank to fit your needs!</p>
       <form>
         <label><h4>Refresh Rate</h4></label>
         <p>The time in milliseconds it takes for fish position to update. Increase this for better performance.</p>
-        <input type="text" id="refreshRate" onchange="updateRefreshRate()" placeholder="1000">
+        <input type="number" id="refreshRate" onchange="updateRefreshRate()" value="1000">
         <br>
         <label><h4>Fish Size Multiplier</h4></label>
         <p>Multiplies all fish sizes. Does not apply retroactively</p>
-        <input type="text" id="sizeMultiplier" onchange="updateSizeMultiplier()" placeholder="1">
+        <input type="number" id="sizeMultiplier" onchange="updateSizeMultiplier()" value="1">
         <br>
         <label><h4>Fish Speed Multiplier</h4></label>
         <p>Multiplies all fish speeds. Does not apply retroactively</p>
-        <input type="text" id="speedMultiplier" onchange="updateSpeedMultiplier()" placeholder="1">
+        <input type="number" id="speedMultiplier" onchange="updateSpeedMultiplier()" value="1">
         <br>
         <label><h4>Tank Export/Import</h4></label>
         <p>Copy the string below to save your tank or paste in a string from a previous tank.</p>
