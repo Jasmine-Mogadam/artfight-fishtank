@@ -94,6 +94,7 @@ html, body {
     text-decoration: none;
     display: inline-block;
     background-color: inherit;
+    transition: 1s;
 }
 
 #hide-menu-fish{
@@ -106,6 +107,12 @@ html, body {
 
 #hide-menu-settings{
     background-color: var(--tertiary-color);
+}
+
+.hide{
+    position: absolute;
+    left: 30px;
+    transition: 1s;
 }
 
 #button-fish{

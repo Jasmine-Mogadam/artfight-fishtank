@@ -1,3 +1,7 @@
+const audioContext = new AudioContext();
+const width = window.innerWidth;
+const height = window.innerHeight;
+
 $(document).ready(function(){
     initializeFishTank()
 
@@ -7,11 +11,30 @@ $(document).ready(function(){
     tank.addEventListener('dragleave', dragLeave);
     tank.addEventListener('drop', drop);
 
+    document.querySelector('#button-fish').addEventListener("click",
+        function() {
+            $("#button-about").toggleClass('hide');
+            $("#button-settings").toggleClass('hide');
+        }
+    );
+    document.querySelector('#button-about').addEventListener("click",
+        function() {
+            $("#button-fish").toggleClass('hide');
+            $("#button-settings").toggleClass('hide');
+        }
+    );
+    document.querySelector('#button-settings').addEventListener("click",
+        function() {
+            $("#button-about").toggleClass('hide');
+            $("#button-fish").toggleClass('hide');
+        }
+    );
+
     //hide side menus if mouse doesn't move for 5 seconds
     var timedelay = 1;
     function delayCheck()
     {
-        if(timedelay == 5)
+        if(timedelay == 5 && document.getElementsByClassName('show-menu').length == 0)
         {
             $("#button-fish").fadeOut();
             $("#button-about").fadeOut();
@@ -31,3 +54,11 @@ $(document).ready(function(){
     // page loads starts delay timer
     _delay = setInterval(delayCheck, 500)
 })
+
+function ToggleSideMenu(name){
+    $('#hide-menu-' + name).toggleClass('show-menu');
+}
+
+function ToggleButtonVis(){
+
+}

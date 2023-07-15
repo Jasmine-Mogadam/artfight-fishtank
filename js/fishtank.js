@@ -1,5 +1,5 @@
 const FishCategories = [
-    {Count: 13, FolderName: "ArtFight", DisplayName: "Art Fight"},
+    {Count: 20, FolderName: "ArtFight", DisplayName: "Art Fight"},
     {Count: 1, FolderName: "Extra", DisplayName: "Extra"},
 ]
 let allJsonFish = []
@@ -17,6 +17,14 @@ function playSample(sample, rate) {
     source.playbackRate.value = rate;
     source.connect(audioContext.destination);
     source.start(0);
+}
+
+async function PlayRandomizedSound(soundName){
+    let randomGlassTap = Math.floor(Math.random() * 3)
+    let randomPitch = Math.random() + .5
+
+    loadSample("Sound/" + soundName + "-" + randomGlassTap + ".mp3")
+        .then(sample => playSample(sample, randomPitch));
 }
 
 async function AddInfoFromJsonFilesToFishes(fishes){
@@ -62,13 +70,11 @@ function CreateMenuCategory(fishes, category){
     $("#fish-menu-contents").append(strToAppend)
 }
 
-//Add fish to tank
-function AddFish(fishJson, xPos, yPos){
+function ConvertJsonToFish(fishJson){
     let fish = Object.setPrototypeOf(JSON.parse(fishJson), Fish.prototype)
     fish.id = rollingId
     rollingId++
-    fish.Position = new Position(0, xPos, yPos)
-    fish.BuildFish()
+    return fish
 }
 
 function dragEnter(e) {
@@ -87,7 +93,9 @@ function dragLeave(e) {
 
 function drop(e) {
     e.target.classList.remove('drag-over');
-    AddFish(e.dataTransfer.getData("Fish"), e.clientX, e.clientY)
+    let fish = ConvertJsonToFish(e.dataTransfer.getData("Fish"))
+    fish.Position = new Position(0,  e.clientX, e.clientY)
+    fish.BuildFish()
 }
 
 function drag(e){
@@ -104,23 +112,28 @@ function mobileDragEnd(e){
     AddFish(e.target.id, e.changedTouches[0].pageX, e.changedTouches[0].pageY)
 }
 
-let toggle = false;
-
-function ToggleSideMenu(name){
-    $('#hide-menu-' + name).toggleClass('show-menu');
-    toggle = !toggle
-}
-
 function AddOneOfEach(){
     allJsonFish.forEach(fishJson => {
-        AddFish(fishJson, 500, 500)
+        let fish = ConvertJsonToFish(fishJson)
+        fish.Position = new Position(Math.random()*360,
+            Math.random() * width - fish.Size,
+            Math.random() * height - fish.Size)
+        fish.SilentEntrance = true
+        fish.BuildFish()
     })
+    PlayRandomizedSound("waterDrop")
 }
 
 function AddRandomFish(){
     let randomFishCount = document.getElementById('input-AddRandomFish').value
     for(let i = 0; i < randomFishCount; i++){
         let fishJson = allJsonFish[Math.floor(Math.random() * allJsonFish.length)]
-        AddFish(fishJson, 500, 500)
+        let fish = ConvertJsonToFish(fishJson)
+        fish.Position = new Position(Math.random()*360,
+            Math.random() * width - fish.Size,
+            Math.random() * height - fish.Size)
+        fish.SilentEntrance = true
+        fish.BuildFish()
     }
+    PlayRandomizedSound("waterDrop")
 }

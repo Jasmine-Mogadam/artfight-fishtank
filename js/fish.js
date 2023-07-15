@@ -2,9 +2,6 @@ const State = {
     Open: 0,
     Closed: 1
 }
-const audioContext = new AudioContext();
-const width = window.innerWidth;
-const height = window.innerHeight;
 
 let refreshRate = 1000;
 let sizeMultiplier = 1;
@@ -47,6 +44,7 @@ class Fish {
         this.MouthState = State.Closed
 
         this.Removed = false
+        this.SilentEntrance = false
         this.Position = new Position(0, this.Size*2, this.Size*2)
         this.id = null
         this.Name = null
@@ -75,7 +73,7 @@ class Fish {
 
         this.Element = document.getElementById(this.id)
 
-        this.PlayRandomizedSound("waterDrop")
+        if(!this.SilentEntrance) PlayRandomizedSound("waterDrop")
         this.Swim().then(r => this.Element.remove())
     }
 
@@ -131,7 +129,7 @@ class Fish {
     async HitEdge(){
         await this.MoveToEdge()
         await this.UpdatePosition().then(r => {
-            this.PlayRandomizedSound("glassTap")
+            PlayRandomizedSound("glassTap")
             this.Flip()
             this.UpdatePositionWithVelocity()
         })
@@ -152,22 +150,6 @@ class Fish {
         else if(this.Position.Y + hitBoxDiameter > height){
             this.Position.Y = height - hitBoxDiameter
         }
-    }
-
-    async PlayFishHitEdgeSound(){
-        let randomGlassTap = Math.floor(Math.random() * 3)
-        let randomPitch = Math.random()*.5 + .75 //.75 to 1.25
-
-        loadSample("Sound/glassTap-" + randomGlassTap + ".mp3")
-            .then(sample => playSample(sample, randomPitch));
-    }
-
-    async PlayRandomizedSound(soundName){
-        let randomGlassTap = Math.floor(Math.random() * 3)
-        let randomPitch = Math.random() + .5
-
-        loadSample("Sound/" + soundName + "-" + randomGlassTap + ".mp3")
-            .then(sample => playSample(sample, randomPitch));
     }
 
     async RandomEvent(event, chance){
