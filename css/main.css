@@ -82,9 +82,10 @@ html, body {
 
 .side-menu-button {
     z-index: 1;
+    color: var(--dark-color);
     position: absolute;
     width: 150px;
-    left: -102px;
+    left: -98px;
     padding: 15px 32px;
     transform: rotate(90deg);
     border: none;
@@ -94,7 +95,18 @@ html, body {
     text-decoration: none;
     display: inline-block;
     background-color: inherit;
-    transition: 1s;
+    transition: 1s all;
+    transition: .5s color, left;
+}
+
+button:hover{
+  color: white;
+  transition: .5s color;
+}
+
+.side-menu-button:hover{
+  left: -102px;
+  transition: .5s;
 }
 
 #hide-menu-fish{

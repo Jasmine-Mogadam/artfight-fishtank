@@ -1,5 +1,5 @@
 const FishCategories = [
-    {Count: 20, FolderName: "ArtFight", DisplayName: "Art Fight"},
+    {Count: 25, FolderName: "ArtFight", DisplayName: "Art Fight"},
     {Count: 1, FolderName: "Extra", DisplayName: "Extra"},
 ]
 let allJsonFish = []
