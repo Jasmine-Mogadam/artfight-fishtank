@@ -58,7 +58,3 @@ $(document).ready(function(){
 function ToggleSideMenu(name){
     $('#hide-menu-' + name).toggleClass('show-menu');
 }
-
-function ToggleButtonVis(){
-
-}

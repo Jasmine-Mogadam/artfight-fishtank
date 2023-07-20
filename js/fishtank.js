@@ -109,7 +109,10 @@ function mobileDrag(e){
 }
 
 function mobileDragEnd(e){
-    AddFish(e.target.id, e.changedTouches[0].pageX, e.changedTouches[0].pageY)
+    let fish = ConvertJsonToFish(e.currentTarget.id)
+    fish.Position = new Position(0, e.changedTouches[0].pageX, e.changedTouches[0].pageY)
+    fish.SilentEntrance = true
+    fish.BuildFish()
 }
 
 function AddOneOfEach(){

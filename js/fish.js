@@ -45,6 +45,7 @@ class Fish {
 
         this.Removed = false
         this.SilentEntrance = false
+        this.ShouldToBeInTank = true
         this.Position = new Position(0, this.Size*2, this.Size*2)
         this.id = null
         this.Name = null
@@ -72,9 +73,16 @@ class Fish {
         $(".tank").append(strToAppend)
 
         this.Element = document.getElementById(this.id)
+        this.Element.ondblclick = event => this.Remove()
+        this.Element.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            if(e.touches.length == 2){ //If touched with two fingers, remove
+                this.Remove()
+            }
+        });
 
         if(!this.SilentEntrance) PlayRandomizedSound("waterDrop")
-        this.Swim().then(r => this.Element.remove())
+        this.Swim()
     }
 
     async Swim(){
@@ -122,7 +130,7 @@ class Fish {
         let hitBoxDiameter = this.Size / 2.0
         let xOutOfBounds = (this.Position.X - hitBoxDiameter < 0) || (this.Position.X + hitBoxDiameter > width)
         let yOutOfBounds = (this.Position.Y - hitBoxDiameter < 0) || (this.Position.Y + hitBoxDiameter > height)
-        return xOutOfBounds || yOutOfBounds
+        return (xOutOfBounds || yOutOfBounds) && this.ShouldToBeInTank
     }
 
     //When edge is hit, flip fish and reverse velocity
@@ -165,7 +173,6 @@ class Fish {
     }
 
     async Flip(){
-        console.log(3)
         this.Blink()
         this.Talk()
         this.SetDirection(this.Position.DirectionAngle + 180)
@@ -245,7 +252,21 @@ class Fish {
         await this.SetDirection(this.Position.DirectionAngle)
     }
 
-    Remove(){
+    async Remove(){
+        this.Speed = 0;
+        this.ShouldToBeInTank = true
         this.Removed = true
+
+        let net = document.getElementById("net")
+        net.style.left = this.Position.X - this.Size + "px"
+        net.style.top = this.Position.Y - this.Size + "px"
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        net.style.left = width/2 - this.Size + "px"
+        net.style.top = "-500px"
+        this.Element.style.left = width/2 - this.Size + "px"
+        this.Element.style.top = this.Size - 500 + "px"
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        console.log("Removed! " + this.id)
+        this.Element.remove()
     }
 }

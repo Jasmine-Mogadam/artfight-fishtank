@@ -25,7 +25,7 @@ html, body {
 
 /* Side menu styles */
 .side-menu {
-    z-index: 2;
+    z-index: 3;
     background-color: var(--secondary-color);
     position: fixed;
     top: 0;
@@ -46,7 +46,7 @@ html, body {
 }
 
 .hide-menu {
-    z-index: 2;
+    z-index: 3;
     background-color: var(--secondary-color);
     position: fixed;
     top:0;
@@ -81,7 +81,7 @@ html, body {
 }
 
 .side-menu-button {
-    z-index: 1;
+    z-index: 2;
     color: var(--dark-color);
     position: absolute;
     width: 150px;
@@ -105,7 +105,7 @@ button:hover{
 }
 
 .side-menu-button:hover{
-  left: -102px;
+  left: -101px;
   transition: .5s;
 }
 
@@ -256,6 +256,28 @@ button:hover{
 
 .y {
     animation: y 7s linear infinite alternate;
+}
+
+.net-holder{
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.net{
+    position: fixed;
+    top:-500px;
+    left:50%;
+    width:500px;
+    height: 500px;
+    transition: 1s;
+}
+
+.net img{
+    width:500px;
+    height: 500px;
+    object-fit: cover;
 }
 
 @keyframes x {
