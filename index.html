@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html lang="en">
   <head>
     <title>Art Fight Fish Tank</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -9,11 +9,41 @@
     <script src="js/fish.js"></script>
     <script src="js/fishtank.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/game.js"></script>
   </head>
   <body>
 
+  <!--div class="hide-menu bottom-menu" id="hide-menu-game">
+    <button class="side-menu-button" id="button-game" type="button" onclick="ToggleMenu('game')">
+      Game
+    </button>
+    <nav class="bottom-menu-contents game-menu" id="game-menu-contents">
+      <button class="button" id="button-StartGame" type="button" onclick="StartGame()">
+        Start Game
+      </button>
+      <div class="fish-store">
+        <div class="gaussian-blur"></div>
+        <div class="game-fish" id="game-fish-0">
+
+        </div>
+        <div class="game-fish" id="game-fish-1">
+
+        </div>
+        <div class="game-fish" id="game-fish-2">
+
+        </div>
+        <div class="game-fish" id="game-fish-3">
+
+        </div>
+        <div class="game-fish" id="game-fish-4">
+
+        </div>
+      </div>
+    </nav>
+  </div-->
+
   <div class="hide-menu side-menu" id="hide-menu-fish">
-    <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleSideMenu('fish')">
+    <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleMenu('fish')">
       Fish
     </button>
     <nav class="side-menu-contents fish-menu" id="fish-menu-contents">
@@ -32,15 +62,15 @@
   </div>
 
   <div class="hide-menu side-menu" id="hide-menu-about">
-    <button class="side-menu-button" id="button-about" type="button" onclick="ToggleSideMenu('about')">
+    <button class="side-menu-button" id="button-about" type="button" onclick="ToggleMenu('about')">
       About
     </button>
     <nav class="side-menu-contents about-menu">
       <div class="content">
         <h1>Instructions</h1>
         <p>Welcome to the fish tank! Here you can find all sorts of fishes. Click the tab labelled "Fish" and drag
-          some aquatic critters into the tank. You can remove any fish by double clicking / tapping them with two
-          fingers. You can also check out the "Settings" tab and change the refresh rate of the tank, add some
+          some aquatic critters into the tank. You can remove any fish by double clicking / tapping them.
+          You can also check out the "Settings" tab and change the refresh rate of the tank, add some
           fun multipliers, and export/import your fish tank. Thanks a ton for playing!</p>
         <h1>Creator</h1>
         <p>Hi! I'm Pinkflamess, a student, animator, programmer, writer and tons more! I'm always trying to learning
@@ -62,7 +92,7 @@
   </div>
 
   <div class="hide-menu side-menu" id="hide-menu-settings">
-    <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleSideMenu('settings')">
+    <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleMenu('settings')">
       Settings
     </button>
     <nav class="side-menu-contents settings-menu">

@@ -55,6 +55,6 @@ $(document).ready(function(){
     _delay = setInterval(delayCheck, 500)
 })
 
-function ToggleSideMenu(name){
+function ToggleMenu(name){
     $('#hide-menu-' + name).toggleClass('show-menu');
 }

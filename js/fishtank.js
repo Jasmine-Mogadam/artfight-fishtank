@@ -1,7 +1,4 @@
-const FishCategories = [
-    {Count: 25, FolderName: "ArtFight", DisplayName: "Art Fight"},
-    {Count: 1, FolderName: "Extra", DisplayName: "Extra"},
-]
+const FishCount = 25
 let allJsonFish = []
 let rollingId = 0
 
@@ -27,6 +24,20 @@ async function PlayRandomizedSound(soundName){
         .then(sample => playSample(sample, randomPitch));
 }
 
+function initializeFishTank() {
+    CreateFishes().then(fishes => AddInfoFromJsonFilesToFishes(fishes)
+        .then(fishes => AddFishToSideMenu(fishes)))
+}
+
+async function CreateFishes(){
+    const fishes = []
+    for (let i = 0; i < FishCount; i++) {
+        fishes[i] = new Fish("Images/Fish/" + i)
+    }
+
+    return fishes
+}
+
 async function AddInfoFromJsonFilesToFishes(fishes){
     let jsonFetches = []
     for (let i = 0; i < fishes.length; i++) {
@@ -37,37 +48,45 @@ async function AddInfoFromJsonFilesToFishes(fishes){
         fishes[i].Name = infoJsonFiles[i].Name
         fishes[i].Size = infoJsonFiles[i].Size
         fishes[i].Speed = infoJsonFiles[i].Speed
+        if(infoJsonFiles[i].Category != null) fishes[i].Category = infoJsonFiles[i].Category
     }
 
     return fishes
 }
 
-function initializeFishTank() {
-    FishCategories.forEach(initializeFishType)
-}
-
-function initializeFishType(fishCategory){
-    if(fishCategory.Count === 0) return
-    const fishes = []
-    for (let i = 0; i < fishCategory.Count; i++) {
-        fishes[i] = new Fish("Fish/" + fishCategory.FolderName + "/" + i)
-    }
-    AddInfoFromJsonFilesToFishes(fishes).then((fishes) => CreateMenuCategory(fishes, fishCategory.DisplayName))
-}
-
-//Jquery to add fish to side menu
-function CreateMenuCategory(fishes, category){
-    let strToAppend = "<div class='menu-category'><div class='menu-category-title'>" + category + " Fish</div>"
+async function AddFishToSideMenu(fishes){
+    let categoryElement = null
     fishes.forEach(fish => {
+        categoryElement = document.getElementById(fish.Category)
+        if(categoryElement == null){
+            CreateNewCategory(fish.Category)
+        }
         let fishJson = JSON.stringify(fish)
-        strToAppend += "<div class='menu-fish' draggable='true' id='" + fishJson + "'" +
+        let strToAppend = "<div class='menu-fish' draggable='true' id='" + fishJson + "'" +
             "ondragstart='drag(event)' ontouchmove='mobileDrag(event)' ontouchend='mobileDragEnd(event)'>" +
-            "<div class='name'>" + fish.Name +
-            "</div><img class='fish-thumb' id='" + fishJson + "'src='" + fish.Thumb + "' draggable='false'\></div>"
+            "<div class='name'>" + fish.Name + "</div><img class='fish-thumb' id='" +
+            fishJson + "'src='" + fish.Thumb + "' draggable='false'\></div>"
         allJsonFish.push(fishJson)
+        $("#" + fish.Category).append(strToAppend)
     })
-    strToAppend+= "</div></div>"
+}
+
+function CreateNewCategory(category){
+    let strToAppend = "<div class='menu-category'><button class='collapsible' onclick='Collapse("
+        + category + ")'>" + category + "</button><div class='fish-holder' id='" + category +
+        "'></div>"
+    strToAppend += "</div></div>"
     $("#fish-menu-contents").append(strToAppend)
+}
+
+function Collapse(category){
+    var content = document.getElementById(category.id);
+    content.previousElementSibling.classList.toggle("active");
+    if (content.style.maxHeight){
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
 }
 
 function ConvertJsonToFish(fishJson){
