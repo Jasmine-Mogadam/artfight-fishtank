@@ -144,11 +144,11 @@ button{
 .collapsible:after {
     float: right;
     margin-left: 5px;
-    content: url('../Images/plus-circle-fill.svg')';
+    content: url('../Images/plus-circle-fill.svg');
 }
 
 .active:after{
-    content: url('../Images/dask-circle-fill.svg');
+    content: url('../Images/dash-circle-fill.svg');
 }
 
 .active, button:hover{
