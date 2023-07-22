@@ -144,11 +144,11 @@ button{
 .collapsible:after {
     float: right;
     margin-left: 5px;
-    content: '\002B';
+    content: '\F4F9';
 }
 
 .active:after{
-    content: "\2212";
+    content: "\F2E5";
 }
 
 .active, button:hover{
@@ -341,4 +341,27 @@ button{
     100% {
         transform: translateY(calc(100vh - var(--size)));
     }
+}
+
+.fullscreen-toggle{
+  z-index: 4;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 50px;
+}
+
+.fullscreen-toggle button{
+  background: none;
+  border: none;
+  width: 50px;
+  height: 50px;
+}
+
+.inactive-fullscreen:after {
+    content: url('../Images/fullscreen.svg');/*'\F3DF';*/
+}
+
+.active-fullscreen:after{
+    content: url('../Images/fullscreen-exit.svg');/*"\F3DE";*/
 }

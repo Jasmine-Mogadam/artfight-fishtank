@@ -58,3 +58,31 @@ $(document).ready(function(){
 function ToggleMenu(name){
     $('#hide-menu-' + name).toggleClass('show-menu');
 }
+
+function ToggleFullScreen() {
+  var fullScreenArea = document.getElementById("fullscreen-area");
+  var fullscreenButton = document.getElementById("fullscreen-button");
+
+  if(fullscreenButton.classList.contains("inactive-fullscreen")){
+  /* View in fullscreen */
+    if (fullScreenArea.requestFullscreen) {
+      fullScreenArea.requestFullscreen();
+    } else if (fullScreenArea.webkitRequestFullscreen) { /* Safari */
+      fullScreenArea.webkitRequestFullscreen();
+    } else if (document.msRequestFullscreen) { /* IE11 */
+      fullScreenArea.msRequestFullscreen();
+    }
+  }
+  else{
+  /* Close fullscreen */
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }
+  $('#fullscreen-button').toggleClass('active-fullscreen');
+  $('#fullscreen-button').toggleClass('inactive-fullscreen');
+}
