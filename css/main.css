@@ -144,11 +144,11 @@ button{
 .collapsible:after {
     float: right;
     margin-left: 5px;
-    content: '\F4F9';
+    content: url('../Images/plus-circle-fill.svg')';
 }
 
 .active:after{
-    content: "\F2E5";
+    content: url('../Images/dask-circle-fill.svg');
 }
 
 .active, button:hover{
