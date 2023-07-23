@@ -1,6 +1,7 @@
 const audioContext = new AudioContext();
-const width = window.innerWidth;
-const height = window.innerHeight;
+let refreshRate = 1000;
+let sizeMultiplier = 1;
+let speedMultiplier = 1;
 
 $(document).ready(function(){
     initializeFishTank()
@@ -34,7 +35,7 @@ $(document).ready(function(){
     var timedelay = 1;
     function delayCheck()
     {
-        if(timedelay == 5 && document.getElementsByClassName('show-menu').length == 0)
+        if(timedelay == 5 && document.getElementsByClassName('show-side-menu').length == 0)
         {
             $("#button-fish").fadeOut();
             $("#button-about").fadeOut();
@@ -55,8 +56,8 @@ $(document).ready(function(){
     _delay = setInterval(delayCheck, 500)
 })
 
-function ToggleMenu(name){
-    $('#hide-menu-' + name).toggleClass('show-menu');
+function ToggleMenu(name,type){
+    $('#hide-menu-' + name).toggleClass('show-' + type + '-menu');
 }
 
 function ToggleFullScreen() {
@@ -85,4 +86,88 @@ function ToggleFullScreen() {
   }
   $('#fullscreen-button').toggleClass('active-fullscreen');
   $('#fullscreen-button').toggleClass('inactive-fullscreen');
+}
+
+function dragEnter(e) {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+}
+
+function dragOver(e) {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+}
+
+function dragLeave(e) {
+    e.target.classList.remove('drag-over');
+}
+
+function drop(e) {
+    e.target.classList.remove('drag-over');
+    let fish = ConvertJsonToFish(e.dataTransfer.getData("Fish"))
+    fish.Position = new Position(0,  e.clientX, e.clientY)
+    fish.BuildFish()
+}
+
+function drag(e){
+    e.dataTransfer.setData("Fish", e.target.id)
+}
+
+function mobileDrag(e){
+    // grab the location of touch
+    this.startX = e.touches[0].pageX;
+    this.startY = e.touches[0].pageY;
+}
+
+function mobileDragEnd(e){
+    let fish = ConvertJsonToFish(e.currentTarget.id)
+    fish.Position = new Position(0, e.changedTouches[0].pageX, e.changedTouches[0].pageY)
+    fish.SilentEntrance = true
+    fish.BuildFish()
+}
+
+function updateRefreshRate() {
+    refreshRate = document.getElementById("refreshRate").value;
+}
+
+function updateSizeMultiplier() {
+    sizeMultiplier = document.getElementById("sizeMultiplier").value;
+}
+
+function updateSpeedMultiplier() {
+    speedMultiplier = document.getElementById("speedMultiplier").value;
+}
+
+function AddOneOfEach(){
+    allJsonFish.forEach(fishJson => {
+        let fish = ConvertJsonToFish(fishJson)
+        fish.Position = GetRandomPosition(fish.Size)
+        fish.SilentEntrance = true
+        fish.BuildFish()
+    })
+    PlayRandomizedSound("waterDrop")
+}
+
+function AddRandomFish(){
+    let randomFishCount = document.getElementById('input-AddRandomFish').value
+    for(let i = 0; i < randomFishCount; i++){
+        let fish = GetRandomFish()
+        fish.Position = GetRandomPosition(fish.Size)
+        fish.SilentEntrance = true
+        fish.BuildFish()
+    }
+    PlayRandomizedSound("waterDrop")
+}
+
+function GetRandomFish(){
+    let fishJson = allJsonFish[Math.floor(Math.random() * allJsonFish.length)]
+    let fish = ConvertJsonToFish(fishJson)
+    return fish
+}
+
+async function RandomEvent(event, chance){
+    let eventRoll = Math.random()
+    if(eventRoll < chance){
+        event()
+    }
 }

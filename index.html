@@ -7,15 +7,17 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/bubbles.css">
+    <script src="js/main.js"></script>
+    <script src="js/position.js"></script>
+    <script src="js/net.js"></script>
     <script src="js/fish.js"></script>
     <script src="js/fishtank.js"></script>
-    <script src="js/main.js"></script>
     <script src="js/game.js"></script>
   </head>
   <body>
 
-  <!--div class="hide-menu bottom-menu" id="hide-menu-game">
-    <button class="side-menu-button" id="button-game" type="button" onclick="ToggleMenu('game')">
+  <div class="hide-bottom-menu bottom-menu" id="hide-menu-game">
+    <button class="bottom-menu-button" id="button-game" type="button" onclick="ToggleMenu('game','bottom')">
       Game
     </button>
     <nav class="bottom-menu-contents game-menu" id="game-menu-contents">
@@ -25,26 +27,26 @@
       <div class="fish-store">
         <div class="gaussian-blur"></div>
         <div class="game-fish" id="game-fish-0">
-
+          <img src="Images/placeholder.png" id="shop-0"/>
         </div>
         <div class="game-fish" id="game-fish-1">
-
+          <img src="Images/placeholder.png" id="shop-1"/>
         </div>
         <div class="game-fish" id="game-fish-2">
-
+          <img src="Images/placeholder.png" id="shop-2"/>
         </div>
         <div class="game-fish" id="game-fish-3">
-
+          <img src="Images/placeholder.png" id="shop-3"/>
         </div>
         <div class="game-fish" id="game-fish-4">
-
+          <img src="Images/placeholder.png" id="shop-4"/>
         </div>
       </div>
     </nav>
-  </div-->
+  </div>
 
-  <div class="hide-menu side-menu" id="hide-menu-fish">
-    <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleMenu('fish')">
+  <div class="hide-side-menu side-menu" id="hide-menu-fish">
+    <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleMenu('fish','side')">
       Fish
     </button>
     <nav class="side-menu-contents fish-menu" id="fish-menu-contents">
@@ -62,8 +64,8 @@
     </nav>
   </div>
 
-  <div class="hide-menu side-menu" id="hide-menu-about">
-    <button class="side-menu-button" id="button-about" type="button" onclick="ToggleMenu('about')">
+  <div class="hide-side-menu side-menu" id="hide-menu-about">
+    <button class="side-menu-button" id="button-about" type="button" onclick="ToggleMenu('about','side')">
       About
     </button>
     <nav class="side-menu-contents about-menu">
@@ -92,8 +94,8 @@
     </nav>
   </div>
 
-  <div class="hide-menu side-menu" id="hide-menu-settings">
-    <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleMenu('settings')">
+  <div class="hide-side-menu side-menu" id="hide-menu-settings">
+    <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleMenu('settings','side')">
       Settings
     </button>
     <nav class="side-menu-contents settings-menu">
@@ -139,11 +141,8 @@
         <div class="bubble x10"></div>
       </div>
     </div>
+    <div class="net-holder" id="net-holder">
 
-    <div class="net-holder">
-      <div class="net" id="net">
-        <img src="Images/net.png">
-      </div>
     </div>
   </div>
   </body>

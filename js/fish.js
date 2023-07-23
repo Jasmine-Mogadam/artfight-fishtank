@@ -3,30 +3,6 @@ const State = {
     Closed: 1
 }
 
-let refreshRate = 1000;
-let sizeMultiplier = 1;
-let speedMultiplier = 1;
-
-function updateRefreshRate() {
-    refreshRate = document.getElementById("refreshRate").value;
-}
-
-function updateSizeMultiplier() {
-    sizeMultiplier = document.getElementById("sizeMultiplier").value;
-}
-
-function updateSpeedMultiplier() {
-    speedMultiplier = document.getElementById("speedMultiplier").value;
-}
-
-class Position {
-    constructor(directionAngle, x, y) {
-        this.DirectionAngle = directionAngle
-        this.X = x
-        this.Y = y
-    }
-}
-
 class Fish {
     constructor(path) {
         this.Path = path
@@ -63,28 +39,29 @@ class Fish {
             this.Position = new Position(0, this.Size * 2, this.Size * 2)
         }
 
-        let strToAppend = "<div class='tank-fish' id='" + this.id +
-            "' style='width:" + this.Size + "px; height:" + this.Size + "px;'>"
-        strToAppend += "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>"
-        strToAppend += "<div class='Body fish-part'><img src='" + this.Body + "'\></div>"
-        strToAppend += "<div class='Mouth fish-part'><img src='" + this.ClosedMouth + "'\></div>"
-        strToAppend += "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>"
-        strToAppend += "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>"
-        strToAppend += "</div></div>"
-        $(".tank").append(strToAppend)
+        let elementToAppend = "<div class='tank-fish' id='" + this.id +
+            "' style='width:" + this.Size + "px; height:" + this.Size + "px;'>" +
+            "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>" +
+            "<div class='Body fish-part'><img src='" + this.Body + "'\></div>" +
+            "<div class='Mouth fish-part'><img src='" + this.ClosedMouth + "'\></div>" +
+            "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>" +
+            "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>" +
+            "</div></div>"
+        $(".tank").append(elementToAppend)
 
         this.Element = document.getElementById(this.id)
         this.Element.ondblclick = event => this.Remove()
         this.Element.ontouchstart = event => this.CheckIfDoubleClickToRemove()
+        this.Position.Element = this.Element
 
         if(!this.SilentEntrance) PlayRandomizedSound("waterDrop")
         this.Swim()
     }
 
     CheckIfDoubleClickToRemove(){
-        var now = new Date().getTime();
-        var timesince = now - this.LastTap;
-        if((timesince < 600) && (timesince > 0)){
+        let now = new Date().getTime();
+        let timeSince = now - this.LastTap;
+        if((timeSince < 600) && (timeSince > 0)){
             this.Remove()
         }
         else{
@@ -99,12 +76,17 @@ class Fish {
             // blink
             // talk
             // change direction
-            this.RandomEvent(this.Blink.bind(this), .10)
-            this.RandomEvent(this.Talk.bind(this), .05)
-            this.RandomEvent(this.RandomChangeDirection.bind(this), .05)
+            RandomEvent(this.Blink.bind(this), .10)
+            RandomEvent(this.Talk.bind(this), .05)
+            RandomEvent(this.RandomChangeDirection.bind(this), .05)
 
-            //Update position in direction at speed
-            await this.UpdatePositionWithVelocity()
+            if(this.Position.IsOutsideWindow(this.Size)){
+                await this.HitEdge()
+            }
+            else{
+                //Update position in direction at speed
+                await this.Position.UpdatePositionWithVelocity(this.Speed)
+            }
             await new Promise(r => setTimeout(r, refreshRate));
         }
     }
@@ -131,58 +113,27 @@ class Fish {
         await new Promise(r => setTimeout(r, 500));
     }
 
-    //If deg is in first or fourth quadrant, flip
-    //If position is at the edge of the tank, reverse direction
-    IsAtEdge(){
-        let hitBoxDiameter = this.Size / 2.0
-        let xOutOfBounds = (this.Position.X - hitBoxDiameter < 0) || (this.Position.X + hitBoxDiameter > width)
-        let yOutOfBounds = (this.Position.Y - hitBoxDiameter < 0) || (this.Position.Y + hitBoxDiameter > height)
-        return (xOutOfBounds || yOutOfBounds)
-    }
-
     //When edge is hit, flip fish and reverse velocity
     async HitEdge(){
-        await this.MoveToEdge()
-        await this.UpdatePosition().then(r => {
+        await this.Position.MoveBackInsideWindow(this.Size)
+        await this.Position.UpdatePosition().then(r => {
             PlayRandomizedSound("glassTap")
             this.Flip()
-            this.UpdatePositionWithVelocity()
+            this.Position.UpdatePositionWithVelocity(this.Speed)
         })
-    }
-
-    async MoveToEdge(){
-        //Set position to wall
-        let hitBoxDiameter = this.Size / 2.0
-        if(this.Position.X - hitBoxDiameter < 0){
-            this.Position.X = 0 + hitBoxDiameter
-        }
-        else if(this.Position.X + hitBoxDiameter > width){
-            this.Position.X = width - hitBoxDiameter
-        }
-        if(this.Position.Y - hitBoxDiameter < 0){
-            this.Position.Y = 0 + hitBoxDiameter
-        }
-        else if(this.Position.Y + hitBoxDiameter > height){
-            this.Position.Y = height - hitBoxDiameter
-        }
-    }
-
-    async RandomEvent(event, chance){
-        let eventRoll = Math.random()
-        if(eventRoll < chance){
-            event()
-        }
     }
 
     async RandomChangeDirection(){
         let directionChange = this.Position.DirectionAngle + ((Math.random() - .5) * 60)
-        this.SetDirection(directionChange)
+        this.Position.DirectionAngle = directionChange
+        await this.Position.UpdateDirection()
     }
 
     async Flip(){
         this.Blink()
         this.Talk()
-        this.SetDirection(this.Position.DirectionAngle + 180)
+        this.Position.DirectionAngle += 180
+        this.Position.UpdateDirection()
     }
 
     async Blink(){
@@ -221,57 +172,10 @@ class Fish {
         this.MouthState = state
     }
 
-    async SetDirection(angle){
-        this.Position.DirectionAngle = angle
-        let unitAngle = angle % 360
-        if(unitAngle < 0){
-            unitAngle += 360
-        }
-        let scale = unitAngle < 270 && unitAngle > 90 ? -1 : 1
-        this.Element.style.transform = "rotate(" + angle + "deg) scaleY(" + scale + ")"
-        this.Element.style.angle = angle
-    }
-
-    async UpdatePositionWithVelocity(){
-        let directionRadians = this.Position.DirectionAngle * (Math.PI / 180)
-        //do trig with direction angle and speed to find new positions
-        let newX = this.Position.X + Math.cos(directionRadians) * this.Speed * refreshRate/1000
-        let newY = this.Position.Y + Math.sin(directionRadians) * this.Speed * refreshRate/1000
-
-        if(this.IsAtEdge()){
-            await this.HitEdge()
-        }
-        else{
-            this.Element.style.left = newX + "px"
-            this.Element.style.top = newY + "px"
-
-            // move to position
-            this.Position.X = newX
-            this.Position.Y = newY
-
-            await this.SetDirection(this.Position.DirectionAngle)
-        }
-    }
-
-    async UpdatePosition(){
-        this.Element.style.left = this.Position.X
-        this.Element.style.top = this.Position.Y
-        await this.SetDirection(this.Position.DirectionAngle)
-    }
-
     async Remove(){
         this.Speed = 0;
         this.Removed = true
-
-        let net = document.getElementById("net")
-        net.style.left = this.Position.X - this.Size + "px"
-        net.style.top = this.Position.Y - this.Size + "px"
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        net.style.left = width/2 - this.Size + "px"
-        net.style.top = "-500px"
-        this.Element.style.left = width/2 - this.Size + "px"
-        this.Element.style.top = this.Size - 500 + "px"
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await CatchFish(this)
         this.Element.remove()
     }
 }

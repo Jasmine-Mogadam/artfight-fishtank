@@ -46,7 +46,7 @@ html, body {
     overflow-y: scroll;
 }
 
-.hide-menu {
+.hide-side-menu {
     z-index: 3;
     background-color: var(--secondary-color);
     position: fixed;
@@ -76,46 +76,12 @@ html, body {
     overflow-y: scroll;
 }
 
-.hide-menu {
-    z-index: 3;
-    background-color: var(--secondary-color);
-    position: fixed;
-    top:0;
-    right:0;
-    width: 300px;
-    height: 100%;
-    padding: 20px;
-    -webkit-transform: translate3d(300px,0,0);
-    -moz-transform: translate3d(300px,0,0);
-    -o-transform: translate3d(300px,0,0);
-    -ms-transform: translate3d(300px,0,0);
-    transform: translate3d(300px,0,0);
-    -webkit-transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -ms-transition: all 0.3s linear;
-    -o-transition: all 0.3s linear;
-    transition: all 0.3s linear;
-}
-
-.show-menu {
+.show-side-menu {
     -webkit-transform: translate3d(0,0,0);
     -moz-transform: translate3d(0,0,0);
     -o-transform: translate3d(0,0,0);
     -ms-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
-}
-
-/* Makes fish left align so name length doesn't effect their alignment*/
-#hide-menu-fish img{
-    display: block;
-    margin-right: auto; /* this is supposed to work but doesn't >: */
-}
-
-.fish-holder {
-    padding: 0 18px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
 }
 
 .side-menu-button {
@@ -137,6 +103,97 @@ html, body {
     transition: .5s color, left;
 }
 
+.side-menu-button:hover{
+    left: -101px;
+    transition: .5s;
+}
+
+.bottom-menu{
+    z-index: 3;
+    background-color: var(--secondary-color);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 300px; /* Adjust the width as needed */
+    height: 100%;
+    padding: 20px;
+    transition: right 0.3s ease; /* Adding smooth transition when retracting */
+}
+
+.bottom-menu-contents{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    word-wrap: break-word;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
+.hide-bottom-menu {
+    z-index: 3;
+    background-color: var(--secondary-color);
+    position: fixed;
+    bottom:0;
+    left:0;
+    width: 100%;
+    height: 300px;
+    padding: 20px;
+    -webkit-transform: translate3d(0,300px,0);
+    -moz-transform: translate3d(0,300px,0);
+    -o-transform: translate3d(0,300px,0);
+    -ms-transform: translate3d(0,300px,0);
+    transform: translate3d(0,300px,0);
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+}
+
+.bottom-menu-button {
+    z-index: 2;
+    color: var(--dark-color);
+    position: absolute;
+    width: 150px;
+    top: -48px;
+    padding: 15px 32px;
+    border: none;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background-color: inherit;
+    transition: 1s all;
+    transition: .5s color, left;
+}
+
+.bottom-menu-button:hover{
+    top: -54px;
+    transition: .5s;
+}
+
+.show-bottom-menu {
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+
+/* Makes fish left align so name length doesn't effect their alignment*/
+#hide-menu-fish img{
+    display: block;
+    margin-right: auto; /* this is supposed to work but doesn't >: */
+}
+
+.fish-holder {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
 button{
     transition: .5s;
 }
@@ -156,9 +213,8 @@ button{
   transition: .5s color;
 }
 
-.side-menu-button:hover{
-  left: -101px;
-  transition: .5s;
+#hide-menu-game{
+    background-color: var(--blue-2);
 }
 
 #hide-menu-fish{
@@ -319,7 +375,7 @@ button{
 
 .net{
     position: fixed;
-    top:-500px;
+    top:-600px;
     left:50%;
     width:500px;
     height: 500px;
