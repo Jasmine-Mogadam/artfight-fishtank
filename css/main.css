@@ -115,7 +115,7 @@ html, body {
     bottom: 0;
     left: 0;
     width: 300px; /* Adjust the width as needed */
-    height: 100%;
+    height: 200px;
     padding: 20px;
     transition: right 0.3s ease; /* Adding smooth transition when retracting */
 }
@@ -126,7 +126,6 @@ html, body {
     padding: 10px;
     word-wrap: break-word;
     overflow: hidden;
-    overflow-x: scroll;
 }
 
 .hide-bottom-menu {
@@ -136,13 +135,13 @@ html, body {
     bottom:0;
     left:0;
     width: 100%;
-    height: 300px;
+    height: 200px;
     padding: 20px;
-    -webkit-transform: translate3d(0,300px,0);
-    -moz-transform: translate3d(0,300px,0);
-    -o-transform: translate3d(0,300px,0);
-    -ms-transform: translate3d(0,300px,0);
-    transform: translate3d(0,300px,0);
+    -webkit-transform: translate3d(0,200px,0);
+    -moz-transform: translate3d(0,200px,0);
+    -o-transform: translate3d(0,200px,0);
+    -ms-transform: translate3d(0,200px,0);
+    transform: translate3d(0,200px,0);
     -webkit-transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
     -ms-transition: all 0.3s linear;
@@ -257,9 +256,35 @@ button{
     background-color: var(--blue-2);
 }
 
+.game-menu button{
+    z-index: 2;
+    position: fixed;
+    top: 50px;
+    left: 45%;
+    border: none;
+    padding: 15px 32px;
+    width: 200px;
+    height: auto;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: var(--accent-color);
+    transition: all .5s;
+}
+
+.game-menu .hide-game-button{
+    top: 200px;
+    transition: all .5s;
+}
+
 .button-with-input button{
     padding: 15px 15px;
     width: 150px;
+}
+
+.hide-button{
+    opacity: 0;
+    pointer-events: none;
+    transition: .5s;
 }
 
 .button-with-input input{
@@ -298,7 +323,7 @@ button{
 
 /* Adjust styles for accent color as needed */
 .menu-category-title {
-    color: var(--accent-color);
+    color: var(--tertiary-color);
     font-weight: bold;
 }
 
@@ -308,6 +333,32 @@ button{
     max-height: 100px; /* Adjust the height as needed */
     display: block;
     margin: 0 auto;
+}
+
+.fish-store{
+    display: flex;
+}
+
+.game-fish {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-fish .fish-thumb{
+    height: 100%;
+    display: block;
+}
+
+.fish-price{
+    align-content: center;
+    align-self: center;
+    display: block;
+}
+
+.hide-game-button{
+    bottom: -100px;
 }
 
 .tank {
@@ -334,7 +385,6 @@ button{
     }
 }
 
-/* Styles for retracting the side menu */
 .tank.active {
     right: 0;
 }
@@ -388,17 +438,6 @@ button{
     object-fit: cover;
 }
 
-@keyframes x {
-    100% {
-        transform: translateX(calc(100vw - var(--size)));
-    }
-}
-@keyframes y {
-    100% {
-        transform: translateY(calc(100vh - var(--size)));
-    }
-}
-
 .fullscreen-toggle{
   z-index: 4;
   position: fixed;
@@ -420,4 +459,12 @@ button{
 
 .active-fullscreen:after{
     content: url('../Images/fullscreen-exit.svg');/*"\F3DE";*/
+}
+
+.coin{
+    position: fixed;
+    transition: 10s;
+    animation: linear;
+    width: var(--size);
+    height: var(--size);
 }

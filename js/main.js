@@ -1,7 +1,9 @@
 const audioContext = new AudioContext();
-let refreshRate = 1000;
-let sizeMultiplier = 1;
-let speedMultiplier = 1;
+var refreshRate = 1000;
+var sizeMultiplier = 1;
+var speedMultiplier = 1;
+var gamePlaying = false
+var clearScreen = false
 
 $(document).ready(function(){
     initializeFishTank()
@@ -35,11 +37,13 @@ $(document).ready(function(){
     var timedelay = 1;
     function delayCheck()
     {
-        if(timedelay == 5 && document.getElementsByClassName('show-side-menu').length == 0)
+        if(timedelay == 5 && document.getElementsByClassName('show-side-menu').length == 0 &&
+            document.getElementsByClassName('show-bottom-menu').length == 0)
         {
             $("#button-fish").fadeOut();
             $("#button-about").fadeOut();
             $("#button-settings").fadeOut();
+            $("#button-game").fadeOut();
             timedelay = 1;
         }
         timedelay = timedelay+1;
@@ -48,6 +52,7 @@ $(document).ready(function(){
         $("#button-fish").fadeIn();
         $("#button-about").fadeIn();
         $("#button-settings").fadeIn();
+        $("#button-game").fadeIn();
         timedelay = 1;
         clearInterval(_delay);
         _delay = setInterval(delayCheck, 500);
@@ -138,36 +143,15 @@ function updateSpeedMultiplier() {
     speedMultiplier = document.getElementById("speedMultiplier").value;
 }
 
-function AddOneOfEach(){
-    allJsonFish.forEach(fishJson => {
-        let fish = ConvertJsonToFish(fishJson)
-        fish.Position = GetRandomPosition(fish.Size)
-        fish.SilentEntrance = true
-        fish.BuildFish()
-    })
-    PlayRandomizedSound("waterDrop")
-}
-
-function AddRandomFish(){
-    let randomFishCount = document.getElementById('input-AddRandomFish').value
-    for(let i = 0; i < randomFishCount; i++){
-        let fish = GetRandomFish()
-        fish.Position = GetRandomPosition(fish.Size)
-        fish.SilentEntrance = true
-        fish.BuildFish()
-    }
-    PlayRandomizedSound("waterDrop")
-}
-
-function GetRandomFish(){
-    let fishJson = allJsonFish[Math.floor(Math.random() * allJsonFish.length)]
-    let fish = ConvertJsonToFish(fishJson)
-    return fish
-}
-
 async function RandomEvent(event, chance){
     let eventRoll = Math.random()
     if(eventRoll < chance){
         event()
     }
+}
+
+function loadSample(url) {
+    return fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(buffer => audioContext.decodeAudioData(buffer));
 }

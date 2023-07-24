@@ -2,12 +2,6 @@ const FishCount = 25
 let allJsonFish = []
 let rollingId = 0
 
-function loadSample(url) {
-    return fetch(url)
-        .then(response => response.arrayBuffer())
-        .then(buffer => audioContext.decodeAudioData(buffer));
-}
-
 function playSample(sample, rate) {
     const source = audioContext.createBufferSource();
     source.buffer = sample;

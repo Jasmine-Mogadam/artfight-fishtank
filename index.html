@@ -10,119 +10,104 @@
     <script src="js/main.js"></script>
     <script src="js/position.js"></script>
     <script src="js/net.js"></script>
+    <script src="js/coin.js"></script>
     <script src="js/fish.js"></script>
     <script src="js/fishtank.js"></script>
     <script src="js/game.js"></script>
   </head>
   <body>
 
-  <div class="hide-bottom-menu bottom-menu" id="hide-menu-game">
-    <button class="bottom-menu-button" id="button-game" type="button" onclick="ToggleMenu('game','bottom')">
-      Game
-    </button>
-    <nav class="bottom-menu-contents game-menu" id="game-menu-contents">
-      <button class="button" id="button-StartGame" type="button" onclick="StartGame()">
-        Start Game
-      </button>
-      <div class="fish-store">
-        <div class="gaussian-blur"></div>
-        <div class="game-fish" id="game-fish-0">
-          <img src="Images/placeholder.png" id="shop-0"/>
-        </div>
-        <div class="game-fish" id="game-fish-1">
-          <img src="Images/placeholder.png" id="shop-1"/>
-        </div>
-        <div class="game-fish" id="game-fish-2">
-          <img src="Images/placeholder.png" id="shop-2"/>
-        </div>
-        <div class="game-fish" id="game-fish-3">
-          <img src="Images/placeholder.png" id="shop-3"/>
-        </div>
-        <div class="game-fish" id="game-fish-4">
-          <img src="Images/placeholder.png" id="shop-4"/>
-        </div>
-      </div>
-    </nav>
-  </div>
-
-  <div class="hide-side-menu side-menu" id="hide-menu-fish">
-    <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleMenu('fish','side')">
-      Fish
-    </button>
-    <nav class="side-menu-contents fish-menu" id="fish-menu-contents">
-      <h1>Fish</h1>
-      <button class="button" id="button-AddOneOfEach" type="button" onclick="AddOneOfEach()">
-        Add One Of Each Fish
-      </button>
-      <div class="button-with-input">
-        <button class="button" id="button-AddRandomFish" type="button" onclick="AddRandomFish()">
-          Add Random Fish
-        </button>
-        <input type="number" id="input-AddRandomFish" value="1">
-      </div>
-      <p>Drag the fish you want into the tank!</p>
-    </nav>
-  </div>
-
-  <div class="hide-side-menu side-menu" id="hide-menu-about">
-    <button class="side-menu-button" id="button-about" type="button" onclick="ToggleMenu('about','side')">
-      About
-    </button>
-    <nav class="side-menu-contents about-menu">
-      <div class="content">
-        <h1>Instructions</h1>
-        <p>Welcome to the fish tank! Here you can find all sorts of fishes. Click the tab labelled "Fish" and drag
-          some aquatic critters into the tank. You can remove any fish by double clicking / tapping them.
-          You can also check out the "Settings" tab and change the refresh rate of the tank, add some
-          fun multipliers, and export/import your fish tank. Thanks a ton for playing!</p>
-        <h1>Creator</h1>
-        <p>Hi! I'm Pinkflamess, a student, animator, programmer, writer and tons more! I'm always trying to learning
-          something new. This is technically my first game jam and I've found the process of making this site really
-          fun! You can find me at:</p>
-        <ul>
-          <li><a href="https://www.deviantart.com/pinkflamess">DeviantArt</a></li>
-          <li><a href="https://artfight.net/~Pinkflamess">Art Fight</a></li>
-        </ul>
-        <h1>Purpose</h1>
-        <p>This is for Art Fight! You can find out more about it here:
-          <a href="https://artfight.net">https://artfight.net</a></p>
-        <h1>Sounds</h1>
-        <p>Sounds were made by me! Fish smacking their silly little faces into the sides of your window were made
-          by flicking a glass cup</p>
-        <p>Bubbles: <a href="https://codepen.io/Mark_Bowley/pen/PozwyP">https://codepen.io/Mark_Bowley/pen/PozwyP</a></p>
-      </div>
-    </nav>
-  </div>
-
-  <div class="hide-side-menu side-menu" id="hide-menu-settings">
-    <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleMenu('settings','side')">
-      Settings
-    </button>
-    <nav class="side-menu-contents settings-menu">
-      <h1>Settings</h1>
-      <p>Change the fish tank to fit your needs!</p>
-      <form>
-        <label><h4>Refresh Rate</h4></label>
-        <p>The time in milliseconds it takes for fish position to update. Increase this for better performance.</p>
-        <input type="number" id="refreshRate" onchange="updateRefreshRate()" value="1000">
-        <br>
-        <label><h4>Fish Size Multiplier</h4></label>
-        <p>Multiplies all fish sizes. Does not apply retroactively</p>
-        <input type="number" id="sizeMultiplier" onchange="updateSizeMultiplier()" value="1">
-        <br>
-        <label><h4>Fish Speed Multiplier</h4></label>
-        <p>Multiplies all fish speeds. Does not apply retroactively</p>
-        <input type="number" id="speedMultiplier" onchange="updateSpeedMultiplier()" value="1">
-        <br>
-        <label><h4>Tank Export/Import</h4></label>
-        <p>Copy the string below to save your tank or paste in a string from a previous tank.</p>
-        <p> !! NOT CURRENTLY IMPLEMENTED !!</p>
-        <input type="text" id="fish-tank-metadata">
-      </form>
-    </nav>
-  </div>
-
   <div id="fullscreen-area">
+    <div class="hide-bottom-menu bottom-menu" id="hide-menu-game">
+      <button class="bottom-menu-button" id="button-game" type="button" onclick="ToggleMenu('game','bottom')">
+        Game
+      </button>
+      <nav class="bottom-menu-contents game-menu" id="game-menu-contents">
+        <button class="button" id="button-StartGame" type="button" onclick="StartGame()">
+          Start Game
+        </button>
+        <div class="fish-store" id="fish-store">
+        </div>
+      </nav>
+    </div>
+
+    <div class="hide-side-menu side-menu" id="hide-menu-fish">
+      <button class="side-menu-button" id="button-fish" type="button" onclick="ToggleMenu('fish','side')">
+        Fish
+      </button>
+      <nav class="side-menu-contents fish-menu" id="fish-menu-contents">
+        <h1>Fish</h1>
+        <button class="button" id="button-AddOneOfEach" type="button" onclick="AddOneOfEach()">
+          Add One Of Each Fish
+        </button>
+        <div class="button-with-input">
+          <button class="button" id="button-AddRandomFish" type="button" onclick="AddRandomFish()">
+            Add Random Fish
+          </button>
+          <input type="number" id="input-AddRandomFish" value="1">
+        </div>
+        <p>Drag the fish you want into the tank!</p>
+      </nav>
+    </div>
+
+    <div class="hide-side-menu side-menu" id="hide-menu-about">
+      <button class="side-menu-button" id="button-about" type="button" onclick="ToggleMenu('about','side')">
+        About
+      </button>
+      <nav class="side-menu-contents about-menu">
+        <div class="content">
+          <h1>Instructions</h1>
+          <p>Welcome to the fish tank! Here you can find all sorts of fishes. Click the tab labelled "Fish" and drag
+            some aquatic critters into the tank. You can remove any fish by double clicking / tapping them.
+            You can also check out the "Settings" tab and change the refresh rate of the tank, add some
+            fun multipliers, and export/import your fish tank. Thanks a ton for playing!</p>
+          <h1>Creator</h1>
+          <p>Hi! I'm Pinkflamess, a student, animator, programmer, writer and tons more! I'm always trying to learning
+            something new. This is technically my first game jam and I've found the process of making this site really
+            fun! You can find me at:</p>
+          <ul>
+            <li><a href="https://www.deviantart.com/pinkflamess">DeviantArt</a></li>
+            <li><a href="https://artfight.net/~Pinkflamess">Art Fight</a></li>
+          </ul>
+          <h1>Purpose</h1>
+          <p>This is for Art Fight! You can find out more about it here:
+            <a href="https://artfight.net">https://artfight.net</a></p>
+          <h1>Sounds</h1>
+          <p>Sounds were made by me! Fish smacking their silly little faces into the sides of your window were made
+            by flicking a glass cup</p>
+          <p>Bubbles: <a href="https://codepen.io/Mark_Bowley/pen/PozwyP">https://codepen.io/Mark_Bowley/pen/PozwyP</a></p>
+        </div>
+      </nav>
+    </div>
+
+    <div class="hide-side-menu side-menu" id="hide-menu-settings">
+      <button class="side-menu-button" id="button-settings" type="button" onclick="ToggleMenu('settings','side')">
+        Settings
+      </button>
+      <nav class="side-menu-contents settings-menu">
+        <h1>Settings</h1>
+        <p>Change the fish tank to fit your needs!</p>
+        <form>
+          <label><h4>Refresh Rate</h4></label>
+          <p>The time in milliseconds it takes for fish position to update. Increase this for better performance.</p>
+          <input type="number" id="refreshRate" onchange="updateRefreshRate()" value="1000">
+          <br>
+          <label><h4>Fish Size Multiplier</h4></label>
+          <p>Multiplies all fish sizes. Does not apply retroactively</p>
+          <input type="number" id="sizeMultiplier" onchange="updateSizeMultiplier()" value="1">
+          <br>
+          <label><h4>Fish Speed Multiplier</h4></label>
+          <p>Multiplies all fish speeds. Does not apply retroactively</p>
+          <input type="number" id="speedMultiplier" onchange="updateSpeedMultiplier()" value="1">
+          <br>
+          <label><h4>Tank Export/Import</h4></label>
+          <p>Copy the string below to save your tank or paste in a string from a previous tank.</p>
+          <p> !! NOT CURRENTLY IMPLEMENTED !!</p>
+          <input type="text" id="fish-tank-metadata">
+        </form>
+      </nav>
+    </div>
+
     <div class="fullscreen-toggle">
       <button class="inactive-fullscreen" id="fullscreen-button" onclick="ToggleFullScreen()"></button>
     </div>
@@ -141,9 +126,7 @@
         <div class="bubble x10"></div>
       </div>
     </div>
-    <div class="net-holder" id="net-holder">
-
-    </div>
+    <div class="net-holder" id="net-holder"></div>
   </div>
   </body>
 </html>

@@ -22,13 +22,15 @@ class Fish {
         this.Removed = false
         this.SilentEntrance = false
         this.Category = "Misc"
-        this.Position = new Position(0, this.Size*2, this.Size*2)
+        this.Position = null
         this.id = null
         this.Name = null
         this.Size = null
         this.Speed = null
         this.Element = null
         this.LastTap = null
+        this.Price = null
+        this.Coin = null
     }
 
     async BuildFish(){
@@ -47,7 +49,7 @@ class Fish {
             "<div class='Eye fish-part'><img src='" + this.OpenEye + "'\></div>" +
             "<div class='Flipper fish-part'><img src='" + this.Flipper + "'\></div>" +
             "</div></div>"
-        $(".tank").append(elementToAppend)
+        $("#tank").append(elementToAppend)
 
         this.Element = document.getElementById(this.id)
         this.Element.ondblclick = event => this.Remove()
@@ -72,13 +74,20 @@ class Fish {
     async Swim(){
         this.StartLoopingAnimations()
         while(!this.Removed){
+            if(clearScreen){
+                this.Removed = true
+            }
             //At random:
             // blink
             // talk
             // change direction
+            // drop coin if game is ongoing
             RandomEvent(this.Blink.bind(this), .10)
             RandomEvent(this.Talk.bind(this), .05)
             RandomEvent(this.RandomChangeDirection.bind(this), .05)
+            if(gamePlaying){
+                RandomEvent(this.DropCoin.bind(this), .05)
+            }
 
             if(this.Position.IsOutsideWindow(this.Size)){
                 await this.HitEdge()
@@ -150,6 +159,12 @@ class Fish {
         await this.SetMouthState(State.Closed)
     }
 
+    async DropCoin(){
+        let coin = new Coin(this.Coin.Value, this.Coin.ImagePath)
+        coin.Position = new Position(0, this.Position.X, this.Position.Y)
+        coin.Drop()
+    }
+
     async SetEyeState(state){
         let eyeElement = this.Element.querySelector(".Eye").children[0]
         if(state == State.Open){
@@ -178,4 +193,31 @@ class Fish {
         await CatchFish(this)
         this.Element.remove()
     }
+}
+
+function GetRandomFish(){
+    let fishJson = allJsonFish[Math.floor(Math.random() * allJsonFish.length)]
+    let fish = ConvertJsonToFish(fishJson)
+    return fish
+}
+
+function AddOneOfEach(){
+    allJsonFish.forEach(fishJson => {
+        let fish = ConvertJsonToFish(fishJson)
+        fish.Position = GetRandomPosition(fish.Size)
+        fish.SilentEntrance = true
+        fish.BuildFish()
+    })
+    PlayRandomizedSound("waterDrop")
+}
+
+function AddRandomFish(){
+    let randomFishCount = document.getElementById('input-AddRandomFish').value
+    for(let i = 0; i < randomFishCount; i++){
+        let fish = GetRandomFish()
+        fish.Position = GetRandomPosition(fish.Size)
+        fish.SilentEntrance = true
+        fish.BuildFish()
+    }
+    PlayRandomizedSound("waterDrop")
 }
