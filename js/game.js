@@ -83,11 +83,16 @@ async function StartGame(){
     let waitForExistingFishToDisappear = refreshRate < 1000 ? 11000 : refreshRate + 100
     await new Promise(r => setTimeout(r, waitForExistingFishToDisappear))
     clearScreen = false;
-
     $("#button-StartGame").toggleClass('hide-button')
     $("#button-fish").toggleClass('hide-button')
     $("#button-about").toggleClass('hide-button')
     $("#button-settings").toggleClass('hide-button')
+
+    //hide all side menus
+    let sideMenus = ["fish", "about", "settings"]
+    sideMenus.forEach(menu =>{
+        document.getElementById("hide-menu-" + menu).classList.remove("show-side-menu")
+    })
 
     let shopFish = GetShopFish(5)
 
@@ -120,9 +125,18 @@ async function StartGame(){
 async function DisplayEndScreen(){
     let captureElement = document.getElementById("capture")
     let splashElement = document.getElementById("game-end-splash")
-    await html2canvas(captureElement).then(canvas => {
-        splashElement.appendChild(canvas)
-    });
+    //await html2canvas(captureElement).then(canvas => {
+    //    splashElement.appendChild(canvas)
+    //});
+    await domtoimage.toPng(captureElement)
+        .then(function (dataUrl) {
+            let img = new Image();
+            img.src = dataUrl;
+            splashElement.appendChild(img);
+        })
+        .catch(function (error) {
+            console.error('oops, something went wrong!', error);
+        });
     $("#game-end-splash").toggleClass('hidden');
     document.getElementById("splash-black-screen").style.opacity = ".3"
 }

@@ -13,8 +13,15 @@
     --blue-3: #344966;
 }
 
+/* Google fonts */
+@font-face {
+    font-family: Fredoka;
+    src: url('../Fonts/Fredoka/static/Fredoka-Regular.ttf');
+}
+
 /* Reset styles to remove default padding and margin */
 html, body {
+    font-family: 'Fredoka', sans-serif;
     margin: 0;
     padding: 0;
     height: 100%;
@@ -22,6 +29,7 @@ html, body {
     color: var(--dark-color);
     background-color: var(--blue-2);
     touch-action: manipulation;
+    //font-size: 2vh;
 }
 
 /* Side menu styles */
