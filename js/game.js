@@ -112,16 +112,16 @@ async function StartGame(){
         scoreSystem.UpdateTime(1000) //Update gui with time
     }
 
-    DisplayEndScreen()
+    await DisplayEndScreen()
     CleanUpAfterGame()
 }
 
 //Show final score with screenshot of fish tank
-function DisplayEndScreen(){
+async function DisplayEndScreen(){
     let captureElement = document.getElementById("capture")
     let splashElement = document.getElementById("game-end-splash")
-    html2canvas(captureElement).then(canvas => {
-        splashElement.getElementById("game-end-splash").appendChild(canvas)
+    await html2canvas(captureElement).then(canvas => {
+        splashElement.appendChild(canvas)
     });
     $("#game-end-splash").toggleClass('hidden');
     document.getElementById("splash-black-screen").style.opacity = ".3"

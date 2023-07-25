@@ -19,6 +19,7 @@ class Coin {
         $("#tank").append(elementToAppend)
         this.Element = document.getElementById("coin-" + coinId)
         this.Element.onclick = event => this.CollectCoin()
+        this.Element.ontouchstart = event => this.CollectCoin()
         this.Position.Element = this.Element
         this.Element.children[0].onload = event => this.SetImageLoadedToTrue()
 

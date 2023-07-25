@@ -2,7 +2,7 @@ const audioContext = new AudioContext();
 var refreshRate = 1000
 var sizeMultiplier = 1
 var speedMultiplier = 1
-var gameTime = 3000//180000 //3 minutes in milliseconds
+var gameTime = 180000 //3 minutes in milliseconds
 var gamePlaying = false
 var clearScreen = false
 var scoreSystem = null
@@ -158,6 +158,10 @@ function updateSpeedMultiplier() {
     speedMultiplier = document.getElementById("speedMultiplier").value;
 }
 
+function updateGameTimer() {
+    gameTime = document.getElementById("gameTimer").value;
+}
+
 async function RandomEvent(event, chance){
     let eventRoll = Math.random()
     if(eventRoll < chance){
@@ -169,4 +173,18 @@ function loadSample(url) {
     return fetch(url)
         .then(response => response.arrayBuffer())
         .then(buffer => audioContext.decodeAudioData(buffer));
+}
+
+async function displayError(msg){
+    let errorContainer = document.getElementById("error-container")
+    let errorMsg = document.createElement("p")
+    errorMsg.className = "error-message"
+    errorMsg.innerText = msg
+    errorMsg.style.opacity = 0;
+    errorContainer.append(errorMsg)
+    errorMsg.style.opacity = 1;
+    await new Promise(r => setTimeout(r, 4000));
+    errorMsg.style.opacity = 0;
+    await new Promise(r => setTimeout(r, 1000));
+    errorMsg.remove()
 }

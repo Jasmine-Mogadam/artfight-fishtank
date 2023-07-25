@@ -20,12 +20,14 @@
 
   <div id="fullscreen-area">
     <div class="game-end-splash hidden" id="game-end-splash">
-      <h2>Good job! Share your score by saving the image below:</h2>
+      <h2>Good job!</h2>
+      <p>Share your score by saving the image below :</p>
       <button class="close-button" type="button" onclick="HideSplashScreen()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="black-screen" id="splash-black-screen"></div>
+    <div class="error-container noselect" id="error-container"></div>
     <div class="hide-bottom-menu bottom-menu" id="hide-menu-game">
       <button class="bottom-menu-button" id="button-game" type="button" onclick="ToggleMenu('game','bottom')">
         Game
@@ -70,8 +72,8 @@
             You can also check out the "Settings" tab and change the refresh rate of the tank, add some
             fun multipliers, and export/import your fish tank. Thanks a ton for playing!</p>
           <h1>Creator</h1>
-          <p>Hi! I'm Pinkflamess, a student, animator, programmer, writer and tons more! I'm always trying to learning
-            something new. This is technically my first game jam and I've found the process of making this site really
+          <p>Hi! I'm Pinkflamess, a student, animator, programmer, writer and tons more! I'm always trying to learn
+            something new. This is technically my first game jam, and I've found the process of making this site really
             fun! You can find me at:</p>
           <ul>
             <li><a href="https://www.deviantart.com/pinkflamess">DeviantArt</a></li>
@@ -107,6 +109,10 @@
           <label><h4>Fish Speed Multiplier</h4></label>
           <p>Multiplies all fish speeds. Does not apply retroactively</p>
           <input type="number" id="speedMultiplier" onchange="updateSpeedMultiplier()" value="1">
+          <br>
+          <label><h4>Game Timer</h4></label>
+          <p>Set the timer for fish game (in milliseconds)</p>
+          <input type="number" id="gameTimer" onchange="updateSpeedMultiplier()" value="180000">
           <br>
           <label><h4>Tank Export/Import</h4></label>
           <p>Copy the string below to save your tank or paste in a string from a previous tank.</p>

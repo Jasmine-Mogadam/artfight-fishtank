@@ -40,7 +40,9 @@ class Fish {
                 scoreSystem.SpendCoin(this.Price)
             }
             else{
-                //send error to gui that there's not enough coins
+                displayError("Not enough coins! You need " + (this.Price - scoreSystem.Coins) +
+                    " more coins to buy this fish!")
+                //play error noise
                 return
             }
         }
