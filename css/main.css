@@ -468,3 +468,74 @@ button{
     width: var(--size);
     height: var(--size);
 }
+
+.coin img{
+    width: 100%;
+    height: 100%;
+}
+.gui{
+    z-index: 5;
+    position: fixed;
+    color: white;
+    font-size: 35px;
+    padding: 10px;
+}
+
+.top-left-gui{
+    top: 20px;
+    left: 20px;
+    text-align: left;
+}
+
+.top-right-gui{
+    top: 20px;
+    right: 20px;
+    text-align: right;
+}
+
+.game-end-splash{
+    z-index: 10;
+    position: fixed;
+    opacity: 1;
+    top: 10%;
+    right: 10%;
+    width: 80%;
+    height: 80%;
+    transform: rotate(5deg);
+    background: var(--light-color);
+    border-radius: 30px;
+    transition: 1s;
+}
+
+.hidden{
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    right: 0;
+    width: 5%;
+    height: 5%;
+    transform: rotate(0);
+    transition: 1s;
+    pointer-events: none;
+}
+
+.black-screen{
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0;
+    transition: 1s;
+    pointer-events: none;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}

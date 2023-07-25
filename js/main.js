@@ -1,9 +1,19 @@
 const audioContext = new AudioContext();
-var refreshRate = 1000;
-var sizeMultiplier = 1;
-var speedMultiplier = 1;
+var refreshRate = 1000
+var sizeMultiplier = 1
+var speedMultiplier = 1
+var gameTime = 3000//180000 //3 minutes in milliseconds
 var gamePlaying = false
 var clearScreen = false
+var scoreSystem = null
+
+
+//Prevent anything from being selected except:
+// - Menu fish
+// - Save fish tank
+const handler = event => event.preventDefault();
+
+document.getElementsByClassName("menu-fish").onmousedown = () => document.addEventListener("mousemove", handler);
 
 $(document).ready(function(){
     initializeFishTank()
@@ -60,6 +70,11 @@ $(document).ready(function(){
     // page loads starts delay timer
     _delay = setInterval(delayCheck, 500)
 })
+
+function HideSplashScreen(){
+    $("#game-end-splash").toggleClass('hidden');
+    document.getElementById("splash-black-screen").style.opacity = "0"
+}
 
 function ToggleMenu(name,type){
     $('#hide-menu-' + name).toggleClass('show-' + type + '-menu');

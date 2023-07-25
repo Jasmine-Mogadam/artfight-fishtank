@@ -12,27 +12,61 @@ gameElements = [
 
 class ScoreSystem {
     constructor() {
-        this.score = 0;
-        this.coins = 3;
+        this.Score = 0;
+        this.Coins = 3;
+        this.Time = gameTime; //in milliseconds
         this.UpdateGui();
     }
 
-    CollectCoin(coin) {
-        this.coins += coin.Value;
-        this.IncreaseScore(coin.Value * 100)
+    SpendCoin(price){
+        this.Coins -= price;
+        this.IncreaseScore(price * 100)
+        this.UpdateGui();
+    }
+
+    CoinCollected(value) {
+        this.Coins += value;
+        this.IncreaseScore(value * 100)
         this.UpdateGui();
     }
 
     IncreaseScore(value) {
-        this.score += value;
+        this.Score += value;
         this.UpdateGui();
+    }
+
+    UpdateTime(millisecondsPassed){
+        this.Time -= millisecondsPassed
+        this.UpdateGui();
+    }
+
+    GetTimeAsString(){
+        let timeInSeconds = this.Time / 1000
+        let minutes = Math.floor(timeInSeconds / 60)
+        let seconds = timeInSeconds - minutes * 60
+
+        let stringToReturn = minutes + ":"
+        if(seconds < 10){
+            stringToReturn += "0" + seconds
+        }
+        else{
+            stringToReturn += seconds
+        }
+
+        return stringToReturn
     }
 
     UpdateGui() {
         // Assuming you have elements in your HTML to display the score and coin count
-        document.getElementById("score-display").textContent = `Score: ${this.score}`;
-        document.getElementById("coin-count").textContent = `Coins: ${this.coins}`;
-        document.getElementById("timer-display").textContent = `Time Remaining: ${this.time}`;
+        document.getElementById("score-display").textContent = "Score: " + this.Score
+        document.getElementById("coin-display").textContent = "Coins: " + this.Coins
+        document.getElementById("timer-display").textContent = "Time: " + this.GetTimeAsString()
+    }
+
+    ClearGui(){
+        document.getElementById("score-display").textContent = "";
+        document.getElementById("coin-display").textContent = "";
+        document.getElementById("timer-display").textContent = "";
     }
 }
 
@@ -46,7 +80,8 @@ async function StartGame(){
     //remove everything off the screen
     $('.tank-fish').remove();
     clearScreen = true;
-    await new Promise(r => setTimeout(r, refreshRate + 100))
+    let waitForExistingFishToDisappear = refreshRate < 1000 ? 11000 : refreshRate + 100
+    await new Promise(r => setTimeout(r, waitForExistingFishToDisappear))
     clearScreen = false;
 
     $("#button-StartGame").toggleClass('hide-button')
@@ -69,13 +104,12 @@ async function StartGame(){
         $("#fish-store").append(elementToAppend)
     }
 
-    //Set timer for 3 minutes, once time is up game ends
-    let timeElapsed = 0
-    while(timeElapsed < 180000){ //3 minutes
-        //Update gui with time
-        console.log(timeElapsed)
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        timeElapsed += 1000
+    scoreSystem = new ScoreSystem()
+
+    //Once time is up, game ends
+    while(scoreSystem.Time >= 0){
+        await new Promise(resolve => setTimeout(resolve, 1000)) //wait 1 second
+        scoreSystem.UpdateTime(1000) //Update gui with time
     }
 
     DisplayEndScreen()
@@ -84,16 +118,24 @@ async function StartGame(){
 
 //Show final score with screenshot of fish tank
 function DisplayEndScreen(){
-
+    let captureElement = document.getElementById("capture")
+    let splashElement = document.getElementById("game-end-splash")
+    html2canvas(captureElement).then(canvas => {
+        splashElement.getElementById("game-end-splash").appendChild(canvas)
+    });
+    $("#game-end-splash").toggleClass('hidden');
+    document.getElementById("splash-black-screen").style.opacity = ".3"
 }
 
 //Re-adds start button, turns all game fish into fish, removes gui
 function CleanUpAfterGame(){
-    $('.game-fish').remove();
+    $('.game-fish').remove()
     $("#button-StartGame").toggleClass('hide-button')
     $("#button-fish").toggleClass('hide-button')
     $("#button-about").toggleClass('hide-button')
     $("#button-settings").toggleClass('hide-button')
+    scoreSystem.ClearGui()
+    scoreSystem = null
 
     gamePlaying = false
 }

@@ -2,6 +2,10 @@ const State = {
     Open: 0,
     Closed: 1
 }
+const BlinkChance = .1
+const TalkChance = .05
+const ChangeDirectionChance = .1
+const CoinDropChance = .1
 
 class Fish {
     constructor(path) {
@@ -15,9 +19,6 @@ class Fish {
         this.Body = this.Path + "/Body.png"
         this.Tail = this.Path + "/Tail.png"
         this.Thumb = this.Path + "/Thumb.png"
-
-        this.EyeState = State.Open
-        this.MouthState = State.Closed
 
         this.Removed = false
         this.SilentEntrance = false
@@ -34,6 +35,15 @@ class Fish {
     }
 
     async BuildFish(){
+        if(gamePlaying){
+            if(scoreSystem.Coins >= this.Price){
+                scoreSystem.SpendCoin(this.Price)
+            }
+            else{
+                //send error to gui that there's not enough coins
+                return
+            }
+        }
         this.Size = this.Size * sizeMultiplier * (Math.random()/2 + .75);
         this.Speed = this.Speed * speedMultiplier * (Math.random()/2 + .75);
 
@@ -41,8 +51,8 @@ class Fish {
             this.Position = new Position(0, this.Size * 2, this.Size * 2)
         }
 
-        let elementToAppend = "<div class='tank-fish' id='" + this.id +
-            "' style='width:" + this.Size + "px; height:" + this.Size + "px;'>" +
+        let elementToAppend = "<div class='tank-fish' id='" + this.id + "'" +
+            "style='width:" + this.Size + "px; height:" + this.Size + "px;'>" +
             "<div class='Tail fish-part'><img src='" + this.Tail + "'\></div>" +
             "<div class='Body fish-part'><img src='" + this.Body + "'\></div>" +
             "<div class='Mouth fish-part'><img src='" + this.ClosedMouth + "'\></div>" +
@@ -82,11 +92,11 @@ class Fish {
             // talk
             // change direction
             // drop coin if game is ongoing
-            RandomEvent(this.Blink.bind(this), .10)
-            RandomEvent(this.Talk.bind(this), .05)
-            RandomEvent(this.RandomChangeDirection.bind(this), .05)
+            RandomEvent(this.Blink.bind(this), BlinkChance)
+            RandomEvent(this.Talk.bind(this), TalkChance)
+            RandomEvent(this.RandomChangeDirection.bind(this), ChangeDirectionChance)
             if(gamePlaying){
-                RandomEvent(this.DropCoin.bind(this), .05)
+                RandomEvent(this.DropCoin.bind(this), CoinDropChance)
             }
 
             if(this.Position.IsOutsideWindow(this.Size)){
@@ -173,7 +183,6 @@ class Fish {
         else{
             eyeElement.src = this.ClosedEye
         }
-        this.EyeState = state
     }
 
     async SetMouthState(state){
@@ -184,10 +193,14 @@ class Fish {
         else{
             eyeElement.src = this.ClosedMouth
         }
-        this.MouthState = state
     }
 
+    //Remove fish from screen with net animation
     async Remove(){
+        //prevent removing fish if game is ongoing
+        if(gamePlaying){
+            return
+        }
         this.Speed = 0;
         this.Removed = true
         await CatchFish(this)

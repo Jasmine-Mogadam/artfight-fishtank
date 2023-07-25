@@ -4,7 +4,7 @@ class Coin {
     constructor(value, path) {
         this.Value = value
         this.ImagePath = path
-        this.Size = 100
+        this.Size = 150 * sizeMultiplier
         this.Removed = false
         this.ImageLoaded = false
         this.Position = null
@@ -13,7 +13,7 @@ class Coin {
 
     async Drop(){
         let elementToAppend = "" +
-            "<div class='coin' id='coin-" + coinId + "'>" +
+            "<div class='coin' id='coin-" + coinId + "' style='width:" + this.Size + "px; height:" + this.Size + "px;'>" +
             "   <img src='" + this.ImagePath + "' id='coin-img-" + coinId + "'/>" +
             "</div>"
         $("#tank").append(elementToAppend)
@@ -52,7 +52,8 @@ class Coin {
     }
 
     async CollectCoin(){
-        // fire an event that can be caught that will IncreaseScore(value)
+        scoreSystem.CoinCollected(this.Value)
+        PlayRandomizedSound("glassTap")
         this.DeleteCoin()
     }
 }
