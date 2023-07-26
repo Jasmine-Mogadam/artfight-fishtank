@@ -112,7 +112,7 @@ async function StartGame(){
     scoreSystem = new ScoreSystem()
 
     //Once time is up, game ends
-    while(scoreSystem.Time >= 0){
+    while(scoreSystem.Time > 0){
         await new Promise(resolve => setTimeout(resolve, 1000)) //wait 1 second
         scoreSystem.UpdateTime(1000) //Update gui with time
     }
@@ -123,21 +123,16 @@ async function StartGame(){
 
 //Show final score with screenshot of fish tank
 async function DisplayEndScreen(){
-    let captureElement = document.getElementById("capture")
-    let splashElement = document.getElementById("game-end-splash")
-    //await html2canvas(captureElement).then(canvas => {
-    //    splashElement.appendChild(canvas)
-    //});
-    await domtoimage.toPng(captureElement)
-        .then(function (dataUrl) {
-            let img = new Image();
-            img.src = dataUrl;
-            splashElement.appendChild(img);
-        })
-        .catch(function (error) {
-            console.error('oops, something went wrong!', error);
-        });
+    $("#button-game").toggleClass('hide-button')
+    document.getElementById("hide-menu-game").classList.remove("show-bottom-menu")
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    await html2canvas(document.body).then(canvas => {
+        canvas.style.height = "80%"
+        canvas.style.width = "100%"
+        document.getElementById("game-end-splash").appendChild(canvas)
+    });
     $("#game-end-splash").toggleClass('hidden');
+    $("#button-game").toggleClass('hide-button')
     document.getElementById("splash-black-screen").style.opacity = ".3"
 }
 
