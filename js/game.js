@@ -126,12 +126,17 @@ async function DisplayEndScreen(){
     $("#button-game").toggleClass('hide-button')
     document.getElementById("hide-menu-game").classList.remove("show-bottom-menu")
     await new Promise(resolve => setTimeout(resolve, 1000))
+
+    let splashScreen = document.getElementById("game-end-splash")
+    if(splashScreen.children.length == 4){
+        splashScreen.children[3].remove()
+    }
     await html2canvas(document.body).then(canvas => {
         canvas.style.height = "80%"
         canvas.style.width = "100%"
-        document.getElementById("game-end-splash").appendChild(canvas)
+        splashScreen.appendChild(canvas)
     });
-    $("#game-end-splash").toggleClass('hidden');
+    $("#game-end-splash").toggleClass('hidden')
     $("#button-game").toggleClass('hide-button')
     document.getElementById("splash-black-screen").style.opacity = ".3"
 }
