@@ -1,5 +1,6 @@
 {
-  "Name": "Ahvenkarppi",
-  "Size": 150,
-  "Speed": 75
+  "Name": "Guppy",
+  "Size": 100,
+  "Speed": 50,
+  "Category": "Realistic"
 }

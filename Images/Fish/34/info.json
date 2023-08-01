@@ -1,5 +1,6 @@
 {
-  "Name": "Ahvenkarppi",
+  "Name": "Ponderin",
   "Size": 150,
-  "Speed": 75
+  "Speed": 60,
+  "Category": "Humanoid"
 }

@@ -1,5 +1,6 @@
 {
-  "Name": "Ahvenkarppi",
-  "Size": 150,
-  "Speed": 75
+  "Name": "Levi",
+  "Size": 140,
+  "Speed": 75,
+  "Category": "Humanoid"
 }

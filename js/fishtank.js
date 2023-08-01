@@ -1,4 +1,4 @@
-const FishCount = 25
+const FishCount = 40
 let allJsonFish = []
 let rollingId = 0
 
